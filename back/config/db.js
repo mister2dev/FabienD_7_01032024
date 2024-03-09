@@ -1,4 +1,4 @@
-const mysql = require("mysql");
+const mysql = require("mysql2");
 
 // Creation de la connexion
 const db = mysql.createConnection({
@@ -8,4 +8,6 @@ const db = mysql.createConnection({
   database: "groupomania",
 });
 
-module.exports = db;
+module.exports.getDB = () => {
+  return db;
+};
