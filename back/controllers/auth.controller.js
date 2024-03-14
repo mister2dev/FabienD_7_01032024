@@ -48,8 +48,9 @@ exports.login = (req, res) => {
         if (match) {
           // If match, generate JWT token
           const user = results[0].username;
+          const maxAge = "24h";
           const token = jwt.sign({ userId: user.id }, process.env.JWT_TOKEN, {
-            expiresIn: "24h",
+            expiresIn: maxAge,
           });
 
           res.status(200).json({ user, token });
@@ -72,4 +73,9 @@ exports.login = (req, res) => {
       });
     }
   });
+};
+
+exports.logout = (req, res) => {
+  res.clearCookie("jwt");
+  res.status(200).json("OUT");
 };

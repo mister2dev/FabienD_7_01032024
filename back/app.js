@@ -3,9 +3,9 @@ const path = require("path");
 const app = express();
 const helmet = require("helmet");
 
-//const sauceRoutes = require("./routes/sauces");
 const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
+const postRoutes = require("./routes/post.routes");
 
 //-------Cors--------------
 
@@ -35,6 +35,6 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
-//app.use("/api/sauces", sauceRoutes);
+app.use("/api/post", postRoutes);
 
 module.exports = app;
