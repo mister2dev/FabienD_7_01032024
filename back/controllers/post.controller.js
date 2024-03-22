@@ -8,24 +8,6 @@ exports.createPost = (req, res, next) => {
   let file = null;
 
   if (req.file) {
-    console.log(req.file);
-    // Vérifier l'extension du fichier
-    if (
-      req.file.mimetype != "image/jpg" &&
-      req.file.mimetype != "image/png" &&
-      req.file.mimetype != "image/jpeg"
-    ) {
-      return res
-        .status(400)
-        .json({ error: "Le fichier doit être au format JPG, JPEG ou PNG." });
-    }
-
-    // Vérifier la taille du fichier
-    else if (req.file.size > 500000) {
-      return res
-        .status(400)
-        .json({ error: "Le fichier ne doit pas dépasser 500 ko." });
-    }
     file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
   }
   const post = [user_id, title, content, file];
