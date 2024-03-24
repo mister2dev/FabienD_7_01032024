@@ -2,7 +2,7 @@ const db_config = require("../config/db");
 const db = db_config.getDB();
 
 exports.getOneUser = (req, res, next) => {
-  const userId = parseInt(req.params.id.substring(1));
+  const userId = req.params.id;
   const sql = `SELECT id, username, email FROM users WHERE id = ?`;
 
   db.query(sql, userId, (err, result) => {
@@ -29,7 +29,7 @@ exports.getAllUsers = (req, res, next) => {
 };
 
 exports.updateUser = (req, res, next) => {
-  const userId = parseInt(req.params.id.substring(1));
+  const userId = req.params.id;
   const username = req.body.username;
   const email = req.body.email;
   const sqlUpdateUser = `UPDATE users SET username = "${username}", email = "${email}" WHERE id = ${userId};`;
@@ -46,7 +46,7 @@ exports.updateUser = (req, res, next) => {
 };
 
 exports.deleteUser = (req, res) => {
-  const userId = parseInt(req.params.id.substring(1));
+  const userId = req.params.id;
   const sql = `DELETE FROM users WHERE id = ?`;
 
   db.query(sql, userId, (err, result) => {

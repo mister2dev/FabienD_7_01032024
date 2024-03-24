@@ -26,6 +26,7 @@ exports.createPost = (req, res, next) => {
 
 exports.getAllPosts = (req, res, next) => {
   const sql = "SELECT * FROM posts";
+
   db.query(sql, (err, result) => {
     if (err) {
       res.status(404).json({ err });
@@ -66,6 +67,7 @@ exports.updatePost = (req, res, next) => {
 exports.deleteOnePost = (req, res, next) => {
   const post_id = req.params.id;
   const sql = `DELETE FROM posts WHERE id = ${post_id}`;
+
   db.query(sql, (err, result) => {
     if (err) {
       res.status(404).json({ err });
@@ -74,19 +76,3 @@ exports.deleteOnePost = (req, res, next) => {
     res.status(200).json(result);
   });
 };
-
-// exports.getOneImage = (req, res, next) => {
-//   const { id: postId } = req.params;
-//   const sql = `SELECT * FROM posts WHERE post.id = ${postId};`;
-//   db.query(sql, (err, result) => {
-//     if (err) {
-//       res.status(404).json({ err });
-//       throw err;
-//     }
-//     if (result[0]) {
-//       result[0].picture =
-//         req.protocol + "://" + req.get("host") + "/images/" + result[0].picture;
-//     }
-//     res.status(200).json(result);
-//   });
-// };

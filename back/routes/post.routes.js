@@ -5,11 +5,11 @@ const auth = require("../middlewares/auth.middleware");
 const upload = require("../middlewares/multer-config");
 
 // Post CRUD
-router.post("/", upload, postCtrl.createPost);
-router.get("/", postCtrl.getAllPosts);
-router.get("/:id", postCtrl.getOnePost);
-router.put("/:id", postCtrl.updatePost);
-router.delete("/:id", postCtrl.deleteOnePost);
+router.post("/", auth, upload, postCtrl.createPost);
+router.get("/", auth, postCtrl.getAllPosts);
+router.get("/:id", auth, postCtrl.getOnePost);
+router.put("/:id", auth, postCtrl.updatePost);
+router.delete("/:id", auth, postCtrl.deleteOnePost);
 
 // Images
 //router.get("/image/:id", postCtrl.getOneImage);

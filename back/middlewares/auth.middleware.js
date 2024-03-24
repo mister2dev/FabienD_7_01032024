@@ -2,10 +2,15 @@ const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {
   try {
+    console.log("req.body.id :", req.body.id);
     const token = req.headers.authorization.split(" ")[1];
+    console.log("tokenauth :", token);
+
     const decodedToken = jwt.verify(token, process.env.JWT_TOKEN);
-    const userId = decodedToken.userId;
-    if (req.body.userId && req.body.userId !== userId) {
+    console.log("decoded :", decodedToken);
+    const reqId = req.body.id;
+    const userAuthId = decodedToken.userId;
+    if (reqId && parseInt(reqId) !== userAuthId) {
       throw "Utilisateur non-reconnu !";
     } else {
       next();

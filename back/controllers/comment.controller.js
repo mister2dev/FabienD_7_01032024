@@ -17,7 +17,6 @@ exports.createComment = (req, res, next) => {
 };
 
 exports.getAllComments = (req, res) => {
-  const post_Id = req.params.id;
   const sql = `SELECT * FROM comments`;
   db.query(sql, (err, result) => {
     if (err) {
@@ -40,6 +39,21 @@ exports.getOneComment = (req, res) => {
   });
 };
 
+exports.updateComment = (req, res, next) => {
+  const comment_id = req.params.id;
+  const sql = `UPDATE posts SET content = "${content}" WHERE id = ${comment_id};`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      res.status(404).json({ err });
+      throw err;
+    }
+    if (result) {
+      res.status(200).json(result);
+    }
+  });
+};
+
 exports.deleteOneComment = (req, res) => {
   const comment_id = req.params.id;
   const sql = `DELETE FROM comments WHERE comments.id = ${comment_id}`;
@@ -51,15 +65,3 @@ exports.deleteOneComment = (req, res) => {
     res.status(200).json(result);
   });
 };
-
-// // exports.getProfilPicture = (req, res) => {
-// //   const { id: user_id } = req.params;
-// //   const sqlGetUser = `SELECT image_url FROM images WHERE images.user_id = ${user_id} ORDER BY images.image_id desc;`;
-// //   db.query(sqlGetUser, (err, result) => {
-// //     if (err) {
-// //       res.status(404).json({ err });
-// //       throw err;
-// //     }
-// //     res.status(200).json(result);
-// //   });
-// // };
