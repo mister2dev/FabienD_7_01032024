@@ -18,6 +18,12 @@ const Log = (props) => {
 
   return (
     <div className="connection-form">
+      <div className="img-container">
+        <img src="./img/icon-above-font.svg" alt="img-log" />
+      </div>
+      {signUpModal && <SignUpForm />}
+      {signInModal && <SignInForm />}
+
       <div className="form-container">
         <ul>
           <li
@@ -25,18 +31,16 @@ const Log = (props) => {
             id="register"
             className={signUpModal ? "active-btn" : null}
           >
-            S'inscrire
+            Inscription
           </li>
           <li
             onClick={handleModals}
             id="login"
             className={signInModal ? "active-btn" : null}
           >
-            Se connecter
+            Connexion
           </li>
         </ul>
-        {signUpModal && <SignUpForm />}
-        {signInModal && <SignInForm />}
       </div>
     </div>
   );
