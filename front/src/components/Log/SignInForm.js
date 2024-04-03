@@ -12,7 +12,7 @@ const SignInForm = () => {
 
     axios({
       method: "post",
-      url: `${process.env.REACT_APP_API_URL}api/user/login`,
+      url: "http://localhost:5000/api/user/login",
       withCredentials: true,
       data: {
         email,
@@ -35,29 +35,32 @@ const SignInForm = () => {
 
   return (
     <form action="" onSubmit={handleLogin} id="sign-up-form">
-      <label htmlFor="email">Email</label>
+      <label htmlFor="email"></label>
       <br />
       <input
         type="text"
         name="email"
         id="email"
+        placeholder="Email"
         onChange={(e) => setEmail(e.target.value)}
         value={email}
       />
       <div className="email error"></div>
-      <br />
-      <label htmlFor="password">Mot de passe</label>
+      <label htmlFor="password"></label>
       <br />
       <input
         type="password"
         name="password"
         id="password"
+        placeholder="Mot de passe"
         onChange={(e) => setPassword(e.target.value)}
         value={password}
       />
       <div className="password error"></div>
       <br />
-      <input type="submit" value="Se connecter" />
+      <input type="submit" value="Suivant" />
+      <br />
+      <br />
     </form>
   );
 };
