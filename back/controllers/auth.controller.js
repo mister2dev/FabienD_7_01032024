@@ -15,9 +15,13 @@ exports.signup = async (req, res) => {
     //console.log("user :", user);
 
     db.query(sql, user, (err, result) => {
-      //console.log("reponse sql :", result);
-      if (!result) {
-        res.status(200).json({ message: "Email déjà enregistré" });
+      console.log("reponse sql :", result, err);
+      if (err) {
+        if (err.errno == 1062 && err.sqlMessage.includes("username"))
+          res.status(200).json({ error: "Nom d'utilisateur déjà enregistré" });
+        else if (err.errno == 1062 && err.sqlMessage.includes("email")) {
+          res.status(200).json({ error: "Email déjà enregistré" });
+        }
       } else {
         res.status(201).json({ message: "Nouvel utilisateur créé" });
       }
@@ -37,11 +41,15 @@ exports.login = (req, res) => {
       return res.status(404).json({ err });
     }
 
+    if (!results || results.length === 0) {
+      return res.status(401).json({ error: "Email non reconnu" });
+    }
+
     // Check if user is active
     if (results[0].is_active !== 1) {
       return res.status(401).json({
         error: true,
-        message:
+        error:
           "Votre compte n'est pas actif. Veuillez contacter l'administrateur.",
       });
     }
@@ -71,18 +79,13 @@ exports.login = (req, res) => {
           // Password does not match
           res.status(401).json({
             error: true,
-            message: "Mot de passe incorrect",
+            error: "Mot de passe incorrect",
           });
         }
       } catch (err) {
         console.log(err);
         return res.status(400).json({ err });
       }
-    } else if (!results[0]) {
-      res.status(401).json({
-        error: true,
-        message: "Erreur d'email ou mot de passe",
-      });
     }
   });
 };
@@ -94,7 +97,7 @@ exports.desactivateAccount = (req, res) => {
     if (err) {
       return res.status(404).json({ err });
     }
-    res.status(200).json("DESACTIVATE");
+    res.status(200).json("Votre compte a bien été desactivé");
   });
 };
 

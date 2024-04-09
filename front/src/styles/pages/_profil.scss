@@ -23,7 +23,7 @@
   
     .connection-form {
       form{
-        padding-bottom: 130px;
+      //padding-bottom: 130px;
       }
       font-family: 'Roboto';
       border: 1px solid black;
@@ -100,7 +100,7 @@
     }
     .img-container {
       height: 200px; /* Définissez la hauteur souhaitée */
-      overflow: hidden; /* Masquez les parties de l'image qui dépassent */
+      //overflow: hidden; /* Masquez les parties de l'image qui dépassent */
     
       img {
         width: 100%; /* Assurez-vous que l'image remplit complètement son conteneur */

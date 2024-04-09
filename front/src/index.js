@@ -4,11 +4,6 @@ import { BrowserRouter } from "react-router-dom";
 import "./styles/index.scss";
 import App from "./App";
 
-import dotenv from "dotenv";
-
-dotenv.config();
-console.log(process.env);
-
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
