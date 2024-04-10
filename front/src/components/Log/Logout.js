@@ -12,10 +12,10 @@ const Logout = () => {
   const logout = async () => {
     await axios({
       method: "get",
-      url: `${process.env.REACT_APP_API_URL}api/user/logout`,
+      url: `${process.env.REACT_APP_API_URL}api/auth/logout`,
       withCredentials: true,
     })
-      .then(() => "jwt")
+      .then(() => localStorage.setItem("token", token))
       .catch((err) => console.log(err));
 
     window.location = "/";
