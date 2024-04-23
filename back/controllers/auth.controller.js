@@ -23,7 +23,7 @@ exports.signup = async (req, res) => {
           res.status(200).json({ error: "Email déjà enregistré" });
         }
       } else {
-        res.status(201).json({ message: "Nouvel utilisateur créé" });
+        res.status(201).json({ error: "Nouvel utilisateur créé" });
       }
     });
   } catch (err) {

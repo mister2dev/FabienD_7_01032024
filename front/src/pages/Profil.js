@@ -1,12 +1,10 @@
 import React from "react";
-import Log from "../components/Log";
+import UpdateProfil from "../components/Profil/UpdateProfil";
 
 const Profil = () => {
   return (
     <div className="profil-page">
-      <div className="log-container">
-        <Log />
-      </div>
+      <UpdateProfil />
     </div>
   );
 };

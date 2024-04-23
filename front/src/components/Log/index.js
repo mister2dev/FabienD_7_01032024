@@ -18,9 +18,7 @@ const Log = (props) => {
 
   return (
     <div className="connection-form">
-      <div className="img-container">
-        <img src="./img/icon-above-font.svg" alt="img-log" />
-      </div>
+      <div className="img-container"></div>
       {signUpModal && <SignUpForm />}
       {signInModal && <SignInForm />}
 

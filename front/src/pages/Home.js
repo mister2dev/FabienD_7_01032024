@@ -2,9 +2,9 @@ import React from "react";
 
 const Home = () => {
   return (
-    <div className="">
+    <div className="profil-page">
       Hello depuis Home
-      <div className=""></div>
+      <div className="log-container"></div>
     </div>
   );
 };
