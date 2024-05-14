@@ -32,9 +32,16 @@ exports.updateUser = (req, res, next) => {
   const userId = req.params.id;
   const username = req.body.username;
   const email = req.body.email;
-  const sqlUpdateUser = `UPDATE users SET username = "${username}", email = "${email}" WHERE id = ${userId};`;
+  let file = null;
 
-  db.query(sqlUpdateUser, (err, result) => {
+  if (req.file) {
+    file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
+  }
+
+  const sqlUpdateUser =
+    "UPDATE users SET username = ?, email = ?, attachment = ? WHERE id = ?";
+
+  db.query(sqlUpdateUser, [username, email, file, userId], (err, result) => {
     if (err) {
       res.status(404).json({ err });
       throw err;
@@ -42,6 +49,27 @@ exports.updateUser = (req, res, next) => {
     if (result) {
       res.status(200).json(result);
     }
+  });
+};
+
+exports.updatePicture = (req, res, next) => {
+  const userId = req.params.id;
+  let file = null;
+
+  if (req.file) {
+    file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
+  }
+
+  const sqlUpdateUser = "UPDATE users SET attachment = ? WHERE id = ?";
+
+  db.query(sqlUpdateUser, [file, userId], (err, result) => {
+    // if (err) {
+    //   res.status(404).json({ err });
+    //   throw err;
+    // }
+    // if (result) {
+    //   res.status(200).json(result);
+    // }
   });
 };
 

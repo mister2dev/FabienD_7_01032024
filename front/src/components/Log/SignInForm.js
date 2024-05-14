@@ -31,6 +31,7 @@ const SignInForm = () => {
       console.log("Réponse :", response.data);
       localStorage.setItem("user", response.data.user);
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("userPic", response.data.imagePath);
       // if (response.data.errors) {
       //   emailError.innerHTML = response.data.errors.email;
       //   passwordError.innerHTML = response.data.errors.password;

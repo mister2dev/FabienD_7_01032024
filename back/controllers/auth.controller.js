@@ -34,7 +34,7 @@ exports.signup = async (req, res) => {
 exports.login = (req, res) => {
   //===== Check if user exists in DB ======
   const { email, password: clearPassword } = req.body;
-  const sql = `SELECT id, username, password, is_active FROM users WHERE email=?`;
+  const sql = `SELECT id, username, password, is_active, attachment FROM users WHERE email=?`;
 
   db.query(sql, email, async (err, results) => {
     if (err) {
@@ -67,13 +67,14 @@ exports.login = (req, res) => {
           // If match, generate JWT token
           const user = results[0].username;
           const userId = results[0].id;
+          const imagePath = results[0].attachment;
           console.log("userId :", userId);
           const maxAge = "24h";
           const token = jwt.sign({ userId: userId }, process.env.JWT_TOKEN, {
             expiresIn: maxAge,
           });
 
-          res.status(200).json({ user, token });
+          res.status(200).json({ user, token, imagePath });
           console.log("jwt :", user, token);
         } else {
           // Password does not match

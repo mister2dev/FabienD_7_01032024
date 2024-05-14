@@ -13,6 +13,7 @@ const commentRoutes = require("./routes/comment.routes");
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 app.use((req, res, next) => {
+  //res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
@@ -24,6 +25,16 @@ app.use((req, res, next) => {
   );
   next();
 });
+
+app.use(
+  "/images",
+  (req, res, next) => {
+    // Permettre le chargement de l'image à partir de n'importe quelle origine
+    res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+    next();
+  },
+  express.static(path.join(__dirname, "images"))
+);
 
 //-------Middleware-----------
 
@@ -37,6 +48,6 @@ app.use("/api/user", userRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/comment", commentRoutes);
 
-app.use("/images", express.static(path.join(__dirname, "images")));
+//app.use("/images", express.static(path.join(__dirname, "images")));
 
 module.exports = app;

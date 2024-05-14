@@ -4,15 +4,15 @@ const db = db_config.getDB();
 // CRUD post
 
 exports.createPost = (req, res, next) => {
-  const { user_id, title, content } = req.body;
+  const { user_id, content } = req.body;
   let file = null;
 
   if (req.file) {
     file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
   }
-  const post = [user_id, title, content, file];
+  const post = [user_id, content, file];
   const sql =
-    "INSERT INTO posts (user_id, title, content, picture) VALUES (?, ?, ?, ?)";
+    "INSERT INTO posts (user_id, content, attachment) VALUES (?, ?, ?)";
 
   db.query(sql, post, (error, result) => {
     if (error) {
@@ -49,17 +49,24 @@ exports.getOnePost = (req, res, next) => {
 };
 
 exports.updatePost = (req, res, next) => {
-  const userId = req.params.id;
+  const postId = req.params.id;
   const content = req.body.content;
-  const sql = `UPDATE posts SET content = "${content}" WHERE id = ${userId};`;
+  //const sql = `UPDATE posts SET content = "${content}" WHERE id = ${postId};`;
 
-  db.query(sql, (err, result) => {
+  let file = null;
+
+  if (req.file) {
+    file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
+  }
+  const sql = "UPDATE posts SET content = ?, attachment = ? WHERE id = ?";
+
+  db.query(sql, [content, file, postId], (err, result) => {
     if (err) {
-      res.status(404).json({ err });
-      throw err;
+      console.error("Erreur lors de la mise à jour du post :", err);
+      return res.status(404).json({ err });
     }
     if (result) {
-      res.status(200).json(result);
+      return res.status(200).json(result);
     }
   });
 };
