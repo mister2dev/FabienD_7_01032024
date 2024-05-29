@@ -1,37 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-//import { useDispatch, useSelector } from "react-redux";
-//import { uploadPicture } from "../../actions/user.actions";
 
 const UploadImg = () => {
-  const [file, setFile] = useState();
+  const [file, setFile] = useState(null);
   const [error, setError] = useState("");
+  const userId = localStorage.getItem("userId");
 
-  //const dispatch = useDispatch();
-  //const userData = useSelector((state) => state.userReducer);
-
-  const handlePicture = (e) => {
+  const handlePicture = async (e) => {
     e.preventDefault();
-    const data = new FormData();
-    //data.append("name", userData.pseudo);
-    //data.append("userId", userData._id);
-    data.append("file", file);
 
-    //dispatch(uploadPicture(data, userData._id));
+    const data = new FormData();
+    data.append("userId", userId);
+    data.append("image", file);
 
     try {
-      const response = axios.post(
+      const response = await axios.post(
         `${process.env.REACT_APP_API_URL}api/user/updatePicture`,
-        {
-          file,
-        },
+        data,
         {
           withCredentials: false,
         }
       );
 
+      console.log("data :", data);
+      console.log("response :", response);
       if (response.data.error) {
         setError(response.data.error); // Stocker le message d'erreur dans l'état
+      } else {
+        // Mettez à jour le stockage local ou l'état avec le nouveau chemin de l'image
+        localStorage.setItem("userPic", response.data.file);
+        window.location.reload();
+        setError("");
       }
       //   console.log("Réponse :", response.data);
       //   localStorage.setItem("user", response.data.user);
@@ -54,8 +53,32 @@ const UploadImg = () => {
       //       error.message
       //     );
       //   }
+
+      console.error(error);
+      setError("An error occurred while uploading the picture");
     }
   };
+
+  //-----------------------------
+  // const [userPic, setUserPic] = useState(localStorage.getItem("userPic"));
+
+  // useEffect(() => {
+  //   const handleStorageChange = () => {
+  //     console.log("localStorage changed:", localStorage.getItem("userPic"));
+  //     setUserPic(localStorage.getItem("userPic"));
+  //   };
+
+  //   window.addEventListener("storage", handleStorageChange);
+
+  //   return () => {
+  //     window.removeEventListener("storage", handleStorageChange);
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   console.log("userPic updated:", userPic);
+  // }, [userPic]);
+  //---------------------------------
 
   return (
     <>

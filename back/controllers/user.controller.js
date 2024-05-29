@@ -29,31 +29,56 @@ exports.getAllUsers = (req, res, next) => {
 };
 
 exports.updateUser = (req, res, next) => {
-  const userId = req.params.id;
+  const userId = req.body.userId;
   const username = req.body.username;
   const email = req.body.email;
-  let file = null;
+  const description = req.body.bio;
 
-  if (req.file) {
-    file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
+  // const sqlUpdateUser =
+  //   "UPDATE users SET username = ?, email = ?, description = ? WHERE id = ?";
+
+  // Construction dynamique de la requête SQL
+  let sqlUpdateUser = "UPDATE users SET ";
+  const params = [];
+
+  if (username) {
+    sqlUpdateUser += "username = ?, ";
+    params.push(username);
+  }
+  if (email) {
+    sqlUpdateUser += "email = ?, ";
+    params.push(email);
+  }
+  if (description) {
+    sqlUpdateUser += "description = ?, ";
+    params.push(description);
   }
 
-  const sqlUpdateUser =
-    "UPDATE users SET username = ?, email = ?, attachment = ? WHERE id = ?";
+  // Suppression de la dernière virgule et espace
+  sqlUpdateUser = sqlUpdateUser.slice(0, -2);
 
-  db.query(sqlUpdateUser, [username, email, file, userId], (err, result) => {
-    if (err) {
-      res.status(404).json({ err });
-      throw err;
+  sqlUpdateUser += " WHERE id = ?";
+  params.push(userId);
+
+  db.query(
+    sqlUpdateUser,
+    params,
+    //[username, email, description, userId],
+    (err, result) => {
+      if (err) {
+        res.status(404).json({ err });
+        throw err;
+      }
+      if (result) {
+        res.status(200).json(result);
+      }
     }
-    if (result) {
-      res.status(200).json(result);
-    }
-  });
+  );
 };
 
 exports.updatePicture = (req, res, next) => {
-  const userId = req.params.id;
+  const userId = req.body.userId;
+  console.log("userId :", req.body.userId);
   let file = null;
 
   if (req.file) {
@@ -63,13 +88,13 @@ exports.updatePicture = (req, res, next) => {
   const sqlUpdateUser = "UPDATE users SET attachment = ? WHERE id = ?";
 
   db.query(sqlUpdateUser, [file, userId], (err, result) => {
-    // if (err) {
-    //   res.status(404).json({ err });
-    //   throw err;
-    // }
-    // if (result) {
-    //   res.status(200).json(result);
-    // }
+    if (err) {
+      res.status(404).json({ err });
+      throw err;
+    }
+    if (result) {
+      res.status(200).json({ result, file });
+    }
   });
 };
 
