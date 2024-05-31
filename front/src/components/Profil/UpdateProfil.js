@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import UploadImg from "./UploadImg";
+import { dateParser } from "../Utils";
 import axios from "axios";
 
 const UpdateProfil = () => {
@@ -7,10 +8,10 @@ const UpdateProfil = () => {
   const userPic = localStorage.getItem("userPic");
   const userId = localStorage.getItem("userId");
   const userText = localStorage.getItem("description");
+  const userDate = localStorage.getItem("createdAt");
 
   const [updateForm, setUpdateForm] = useState(false);
   const [bio, setBio] = useState(userText || "");
-  const [error, setError] = useState("");
 
   const handleUpdate = async () => {
     setUpdateForm(false);
@@ -20,10 +21,6 @@ const UpdateProfil = () => {
       bio: bio,
     };
 
-    // const data = new FormData();
-    // data.append("userId", userId);
-    // data.append("description", bio);
-
     try {
       const response = axios.put(
         `${process.env.REACT_APP_API_URL}api/user/updateUser`,
@@ -32,18 +29,25 @@ const UpdateProfil = () => {
           withCredentials: false,
         }
       );
-      localStorage.setItem("description ", bio);
-      console.log("url :", process.env.REACT_APP_API_URL);
+
       console.log("data :", data);
       console.log("response :", response);
 
-      if (response.data.error) {
-        setError(response.data.error); // Stocker le message d'erreur dans l'état
-      } else {
-        // Mettez à jour le stockage local ou l'état avec le nouveau chemin de l'image
-        window.location.reload();
-      }
+      // if (response.data.error) {
+      //   setError(response.data.error); // Stocker le message d'erreur dans l'état
+      // } else {
+      //   // Mettez à jour le stockage local ou l'état avec le nouveau chemin de l'image
+      // }
     } catch (error) {}
+    localStorage.setItem("description", bio);
+  };
+
+  const desactivateAccount = () => {
+    axios.post(`http://localhost:5000/api/auth/desactivate/${userId}`);
+
+    if (!window.confirm(`Voulez-vous vraiment désactiver le compte ?`)) return;
+    localStorage.clear();
+    window.location.href = "/connexion";
   };
 
   return (
@@ -78,13 +82,8 @@ const UpdateProfil = () => {
               </>
             )}
           </div>
-          {/* <h4>Membre depuis le : {dateParser(userData.createdAt)}</h4>
-          <h5 onClick={() => setFollowingPopup(true)}>
-            Abonnements : {userData.following ? userData.following.length : ""}
-          </h5>
-          <h5 onClick={() => setFollowersPopup(true)}>
-            Abonnés : {userData.followers ? userData.followers.length : ""}
-          </h5> */}
+          <h4>Membre depuis {dateParser(userDate)}</h4>
+          <button onClick={desactivateAccount}>Désactiver compte</button>
         </div>
       </div>
     </div>

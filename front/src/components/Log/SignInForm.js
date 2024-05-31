@@ -34,6 +34,7 @@ const SignInForm = () => {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("userPic", response.data.imagePath);
       localStorage.setItem("description", response.data.description);
+      localStorage.setItem("createdAt", response.data.createdAt);
       // if (response.data.errors) {
       //   emailError.innerHTML = response.data.errors.email;
       //   passwordError.innerHTML = response.data.errors.password;

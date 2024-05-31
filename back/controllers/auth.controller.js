@@ -34,7 +34,7 @@ exports.signup = async (req, res) => {
 exports.login = (req, res) => {
   //===== Check if user exists in DB ======
   const { email, password: clearPassword } = req.body;
-  const sql = `SELECT id, username, password, is_active, description, attachment FROM users WHERE email=?`;
+  const sql = `SELECT id, username, password, is_active, description, attachment, createdAt FROM users WHERE email=?`;
 
   db.query(sql, email, async (err, results) => {
     if (err) {
@@ -58,7 +58,7 @@ exports.login = (req, res) => {
     if (results[0]) {
       try {
         const { password: hashedPassword } = results[0];
-        console.log("résultat requête :", results);
+        console.log("résultat requête :", results[0]);
 
         const match = await bcrypt.compare(clearPassword, hashedPassword);
         console.log("mdp OK :", match);
@@ -69,13 +69,16 @@ exports.login = (req, res) => {
           const userId = results[0].id;
           const imagePath = results[0].attachment;
           const description = results[0].description;
+          const createdAt = results[0].createdAt;
           console.log("userId :", userId);
           const maxAge = "24h";
           const token = jwt.sign({ userId: userId }, process.env.JWT_TOKEN, {
             expiresIn: maxAge,
           });
 
-          res.status(200).json({ userId, user, token, description, imagePath });
+          res
+            .status(200)
+            .json({ userId, user, token, description, createdAt, imagePath });
           console.log("jwt :", user, token);
         } else {
           // Password does not match
@@ -94,7 +97,7 @@ exports.login = (req, res) => {
 
 exports.desactivateAccount = (req, res) => {
   const userId = req.params.id;
-  const sql = `UPDATE users SET is_active=0 WHERE users.id = ?`;
+  const sql = `UPDATE users SET is_active=0 WHERE id = ?`;
   db.query(sql, userId, (err, results) => {
     if (err) {
       return res.status(404).json({ err });

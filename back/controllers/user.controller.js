@@ -78,7 +78,6 @@ exports.updateUser = (req, res, next) => {
 
 exports.updatePicture = (req, res, next) => {
   const userId = req.body.userId;
-  console.log("userId :", req.body.userId);
   let file = null;
 
   if (req.file) {

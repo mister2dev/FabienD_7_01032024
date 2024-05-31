@@ -1,10 +1,12 @@
 import React from "react";
+import Thread from "../components/Thread";
 
 const Home = () => {
   return (
-    <div className="profil-page">
-      Hello depuis Home
-      <div className="log-container"></div>
+    <div className="home">
+      <div className="main">
+        <Thread />
+      </div>
     </div>
   );
 };

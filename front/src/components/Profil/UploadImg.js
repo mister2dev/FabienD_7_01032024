@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 const UploadImg = () => {
@@ -32,12 +32,6 @@ const UploadImg = () => {
         window.location.reload();
         setError("");
       }
-      //   console.log("Réponse :", response.data);
-      //   localStorage.setItem("user", response.data.user);
-      //   localStorage.setItem("token", response.data.token);
-      //   localStorage.setItem("userPic", response.data.imagePath);
-      //window.location = "/";
-      //}
     } catch (error) {
       //   if (error.response) {
       //     // La requête a été reçue par le serveur, mais il a renvoyé un code d'erreur
@@ -58,27 +52,6 @@ const UploadImg = () => {
       setError("An error occurred while uploading the picture");
     }
   };
-
-  //-----------------------------
-  // const [userPic, setUserPic] = useState(localStorage.getItem("userPic"));
-
-  // useEffect(() => {
-  //   const handleStorageChange = () => {
-  //     console.log("localStorage changed:", localStorage.getItem("userPic"));
-  //     setUserPic(localStorage.getItem("userPic"));
-  //   };
-
-  //   window.addEventListener("storage", handleStorageChange);
-
-  //   return () => {
-  //     window.removeEventListener("storage", handleStorageChange);
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log("userPic updated:", userPic);
-  // }, [userPic]);
-  //---------------------------------
 
   return (
     <>
