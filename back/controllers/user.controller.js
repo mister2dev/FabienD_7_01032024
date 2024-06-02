@@ -16,7 +16,7 @@ exports.getOneUser = (req, res, next) => {
 };
 
 exports.getAllUsers = (req, res, next) => {
-  const sql = `SELECT id, username, email FROM users`;
+  const sql = `SELECT id, username, email, attachment FROM users`;
 
   db.query(sql, (err, result) => {
     console.log("liste user :", result);
