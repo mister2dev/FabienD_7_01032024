@@ -9,7 +9,7 @@ router.post("/", upload, postCtrl.createPost);
 router.get("/:id", auth, postCtrl.getOnePost);
 router.get("/", postCtrl.getAllPosts);
 router.put("/:id", upload, postCtrl.updatePost);
-router.delete("/:id", auth, postCtrl.deleteOnePost);
+router.delete("/:id", postCtrl.deleteOnePost);
 
 // Images
 //router.get("/image/:id", postCtrl.getOneImage);

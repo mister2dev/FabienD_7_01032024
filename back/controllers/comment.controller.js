@@ -29,7 +29,7 @@ exports.getAllComments = (req, res) => {
 
 exports.getOneComment = (req, res) => {
   const comment_Id = req.params.id;
-  const sql = `SELECT * FROM comments WHERE comments.id = ${comment_Id}`;
+  const sql = `SELECT * FROM comments WHERE comments.post_id = ${comment_Id}`;
   db.query(sql, (err, result) => {
     if (err) {
       res.status(404).json({ err });
@@ -41,7 +41,7 @@ exports.getOneComment = (req, res) => {
 
 exports.updateComment = (req, res, next) => {
   const comment_id = req.params.id;
-  const sql = `UPDATE posts SET content = "${content}" WHERE id = ${comment_id};`;
+  const sql = `UPDATE comments SET content = "${content}" WHERE id = ${comment_id};`;
 
   db.query(sql, (err, result) => {
     if (err) {

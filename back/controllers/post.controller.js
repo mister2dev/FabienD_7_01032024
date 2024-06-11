@@ -53,11 +53,19 @@ exports.updatePost = (req, res, next) => {
   const content = req.body.content;
   //const sql = `UPDATE posts SET content = "${content}" WHERE id = ${postId};`;
 
-  let file = null;
-
-  if (req.file) {
-    file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
-  }
+  //  let file = null;
+  let file =
+    req.body.file ||
+    (req.file &&
+      `${req.protocol}://${req.get("host")}/images/${req.file.filename}`);
+  console.log("request", req.body);
+  // if (req.body.file) {
+  //   file = req.body.file;
+  // }
+  // if (req.file) {
+  //   file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
+  // }
+  console.log("file", file);
   const sql = "UPDATE posts SET content = ?, attachment = ? WHERE id = ?";
 
   db.query(sql, [content, file, postId], (err, result) => {

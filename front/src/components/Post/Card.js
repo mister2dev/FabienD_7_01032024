@@ -2,30 +2,37 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { dateParser, isEmpty } from "../Utils";
 import LikeButton from "./LikeButton";
+import DeleteCard from "./DeleteCard";
+import CardComments from "./CardComments";
 
-const Card = ({ post }) => {
+const Card = ({ post, reloadPosts }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdated, setIsUpdated] = useState(false);
   const [textUpdate, setTextUpdate] = useState(null);
   const [usersData, setUsersData] = useState([]);
   const [userData, setUserData] = useState([]);
   const userId = localStorage.getItem("userId");
-  const [attachmentUpdate, setAttachmentUpdate] = useState(null);
+  //const [attachmentUpdate, setAttachmentUpdate] = useState();
 
   const updateItem = () => {
     if (textUpdate) {
-      setAttachmentUpdate(post.attachment);
-      console.log("post", post);
+      //setAttachmentUpdate(post.attachment);
+      console.log("post1", post);
+      //console.log("updateItem", attachmentUpdate);
+
       return axios({
         method: "put",
         url: `${process.env.REACT_APP_API_URL}api/post/${post.id}`,
-        data: { attachmentUpdate, content: textUpdate },
+        data: { file: post.attachment, content: textUpdate },
       })
         .then((res) => {
           console.log("res.data de updateItem :", res.data);
+          setIsUpdated(false);
+          reloadPosts();
         })
         .catch((err) => console.log(err));
     }
+    console.log("post.attachment", post.attachment);
     setIsUpdated(false);
   };
 
@@ -115,7 +122,7 @@ const Card = ({ post }) => {
             {post.attachment && (
               <img src={post.attachment} alt="card-pic" className="card-pic" />
             )}
-            {post.video && (
+            {/* {post.video && (
               <iframe
                 width="500"
                 height="300"
@@ -125,18 +132,23 @@ const Card = ({ post }) => {
                 allowFullScreen
                 title={post._id}
               ></iframe>
-            )}
+            )} */}
             {userData.id === post.user_id && (
               <div className="button-container">
                 <div onClick={() => setIsUpdated(!isUpdated)}>
                   <img src="./img/edit.svg" alt="edit" />
                 </div>
-                {/* <DeleteCard id={post.user_id} /> */}
+                <DeleteCard
+                  post={post}
+                  reloadPosts={reloadPosts}
+                  id={post.user_id}
+                />
               </div>
             )}
             <div className="card-footer">
               <LikeButton />
             </div>
+            <CardComments postId={post.id} />
           </div>
         </>
       )}
