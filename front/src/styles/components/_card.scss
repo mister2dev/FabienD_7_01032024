@@ -360,3 +360,18 @@
       }
     }
   }
+
+  .footer-form .icon input {
+    height: 16px;
+    width: 16px;
+    position: relative;
+    top: 7px;
+    right: 16px;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .footer-form .icon img {
+    height: 16px;
+    width: 14px;
+  }

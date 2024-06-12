@@ -4,7 +4,8 @@ import axios from "axios";
 const Logout = () => {
   const removetoken = () => {
     if (typeof window !== "undefined") {
-      localStorage.removeItem("token");
+      //localStorage.removeItem("token");
+      localStorage.clear();
     }
   };
 
