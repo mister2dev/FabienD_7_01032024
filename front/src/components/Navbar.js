@@ -1,13 +1,9 @@
-//import React, { useContext } from "react";
-//import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-//import { UidContext } from "./AppContext";
 import Logout from "./Log/Logout";
 
 const Navbar = () => {
-  //  const uid = useContext(UidContext);
-  //  const userData = useSelector((state) => state.userReducer);
   const user = localStorage.getItem("user");
+  const userPic = localStorage.getItem("userPic");
 
   return (
     <nav>
@@ -24,7 +20,10 @@ const Navbar = () => {
             <li></li>
             <li className="welcome">
               <NavLink to="/profil">
-                <h5>Bienvenue {user}</h5>
+                <div className="user-connexion">
+                  <img src={userPic} alt="user-pic" />
+                  <h5>Bienvenue {user}</h5>
+                </div>
               </NavLink>
             </li>
             <Logout />

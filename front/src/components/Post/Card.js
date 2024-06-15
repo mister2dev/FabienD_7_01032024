@@ -133,17 +133,27 @@ const Card = ({ post, reloadPosts }) => {
                 title={post._id}
               ></iframe>
             )} */}
-            {userData.id === post.user_id && (
+            {userData.is_admin ? (
               <div className="button-container">
-                <div onClick={() => setIsUpdated(!isUpdated)}>
-                  <img src="./img/edit.svg" alt="edit" />
-                </div>
                 <DeleteCard
                   post={post}
                   reloadPosts={reloadPosts}
                   id={post.user_id}
                 />
               </div>
+            ) : (
+              userData.id === post.user_id && (
+                <div className="button-container">
+                  <div onClick={() => setIsUpdated(!isUpdated)}>
+                    <img src="./img/edit.svg" alt="edit" />
+                  </div>
+                  <DeleteCard
+                    post={post}
+                    reloadPosts={reloadPosts}
+                    id={post.user_id}
+                  />
+                </div>
+              )
             )}
             <div className="card-footer">
               <LikeButton />

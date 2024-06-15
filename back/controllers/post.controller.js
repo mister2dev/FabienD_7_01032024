@@ -25,7 +25,7 @@ exports.createPost = (req, res, next) => {
 };
 
 exports.getAllPosts = (req, res, next) => {
-  const sql = "SELECT * FROM posts";
+  const sql = "SELECT * FROM posts ORDER BY createdAt DESC";
 
   db.query(sql, (err, result) => {
     if (err) {

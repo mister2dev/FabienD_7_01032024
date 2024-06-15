@@ -29,6 +29,7 @@ const SignInForm = () => {
       }
 
       console.log("Réponse :", response.data);
+      localStorage.setItem("user-data", response.data);
       localStorage.setItem("userId", response.data.userId);
       localStorage.setItem("user", response.data.user);
       localStorage.setItem("token", response.data.token);

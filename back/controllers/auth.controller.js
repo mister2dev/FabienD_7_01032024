@@ -34,7 +34,7 @@ exports.signup = async (req, res) => {
 exports.login = (req, res) => {
   //===== Check if user exists in DB ======
   const { email, password: clearPassword } = req.body;
-  const sql = `SELECT id, username, password, is_active, description, attachment, createdAt FROM users WHERE email=?`;
+  const sql = `SELECT id, username, password, is_active, description, attachment, is_admin, createdAt FROM users WHERE email=?`;
 
   db.query(sql, email, async (err, results) => {
     if (err) {
@@ -69,6 +69,7 @@ exports.login = (req, res) => {
           const userId = results[0].id;
           const imagePath = results[0].attachment;
           const description = results[0].description;
+          const admin = results[0].is_admin;
           const createdAt = results[0].createdAt;
           console.log("userId :", userId);
           const maxAge = "24h";
@@ -76,9 +77,15 @@ exports.login = (req, res) => {
             expiresIn: maxAge,
           });
 
-          res
-            .status(200)
-            .json({ userId, user, token, description, createdAt, imagePath });
+          res.status(200).json({
+            userId,
+            user,
+            token,
+            description,
+            createdAt,
+            imagePath,
+            admin,
+          });
           console.log("jwt :", user, token);
         } else {
           // Password does not match

@@ -99,6 +99,7 @@ const CardComments = ({ postId }) => {
               comment={comment}
               postId={postId}
               reloadComments={getComments}
+              userData={userData}
             />
           </div>
         </div>

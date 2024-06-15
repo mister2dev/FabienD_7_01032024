@@ -1,35 +1,23 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { isEmpty } from "./Utils";
 import Card from "./Post/Card";
 
-const Thread = () => {
+const Thread = ({ getPosts, posts }) => {
   const [loadPost, setLoadPost] = useState(true);
-  const [posts, setPosts] = useState([]);
-
-  const getPosts = () => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}api/post/`)
-      .then((res) => {
-        console.log("res.data", res.data);
-        setPosts(res.data);
-      })
-      .catch((err) => console.log(err));
-  };
 
   useEffect(() => {
     if (loadPost) {
       getPosts();
       setLoadPost(false);
     }
-  }, [loadPost]);
+  }, [loadPost, getPosts]);
 
   return (
     <div className="thread-container">
       <ul>
-        {!isEmpty(posts[0]) &&
+        {!isEmpty(posts) &&
           posts.map((post) => {
-            return <Card post={post} reloadPosts={getPosts} key={post.id} />;
+            return <Card reloadPosts={getPosts} post={post} key={post.id} />;
           })}
       </ul>
     </div>

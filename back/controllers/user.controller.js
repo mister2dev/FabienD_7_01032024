@@ -3,7 +3,7 @@ const db = db_config.getDB();
 
 exports.getOneUser = (req, res, next) => {
   const userId = req.params.id;
-  const sql = `SELECT id, username, email FROM users WHERE id = ?`;
+  const sql = `SELECT id, username, email, is_admin FROM users WHERE id = ?`;
 
   db.query(sql, userId, (err, result) => {
     console.log("resultat :", result);

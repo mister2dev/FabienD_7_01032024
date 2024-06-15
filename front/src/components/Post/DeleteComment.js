@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const DeleteComment = ({ comment, reloadComments }) => {
+const DeleteComment = ({ comment, reloadComments, userData }) => {
   const [isAuthor, setIsAuthor] = useState(false);
   const userId = localStorage.getItem("userId");
 
@@ -28,7 +28,7 @@ const DeleteComment = ({ comment, reloadComments }) => {
 
   return (
     <div className="edit-comment">
-      {isAuthor && (
+      {(userData.is_admin || isAuthor) && (
         <div className="button-container">
           <span
             onClick={() => {
