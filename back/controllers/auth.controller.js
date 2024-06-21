@@ -9,7 +9,7 @@ exports.signup = async (req, res) => {
     const { password } = req.body;
     const encryptedPassword = await bcrypt.hash(password, 10);
 
-    const user = { ...req.body, password: encryptedPassword };
+    const user = { ...req.body, password: encryptedPassword, attachment: "http://localhost:5000/images/avatar-no2.png" };
     const sql = "INSERT INTO users SET ?";
 
     //console.log("user :", user);

@@ -1,13 +1,24 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const UploadImg = () => {
+const UploadImg = ({ setPreview }) => {
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
   const userId = localStorage.getItem("userId");
 
-  const handlePicture = async (e) => {
+  const handlePicture = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+    setPreview(URL.createObjectURL(selectedFile)); // Mettre à jour la prévisualisation
+  };
+
+  const handleUpload = async (e) => {
     e.preventDefault();
+
+    if (!file) {
+      setError("Veuillez sélectionner une image avant de la télécharger.");
+      return;
+    }
 
     const data = new FormData();
     data.append("userId", userId);
@@ -33,36 +44,21 @@ const UploadImg = () => {
         setError("");
       }
     } catch (error) {
-      //   if (error.response) {
-      //     // La requête a été reçue par le serveur, mais il a renvoyé un code d'erreur
-      //     console.error("Erreur de requête :", error.response.data);
-      //     setError(error.response.data.error); // Stocker le message d'erreur dans l'état
-      //   } else if (error.request) {
-      //     // La requête a été effectuée, mais aucune réponse n'a été reçue
-      //     console.error("Aucune réponse reçue pour la requête :", error.request);
-      //   } else {
-      //     // Une erreur s'est produite lors de la configuration de la requête
-      //     console.error(
-      //       "Erreur lors de la configuration de la requête :",
-      //       error.message
-      //     );
-      //   }
-
       console.error(error);
-      setError("An error occurred while uploading the picture");
+      setError("Une erreur s'est produite lors du téléchargement de l'image");
     }
   };
 
   return (
     <>
-      <form action="" onSubmit={handlePicture} className="upload-pic">
+      <form action="" onSubmit={handleUpload} className="upload-pic">
         <label htmlFor="file">Changer d'image</label>
         <input
           type="file"
           id="file"
           name="file"
           accept=".jpg, .jpeg, .png"
-          onChange={(e) => setFile(e.target.files[0])}
+          onChange={handlePicture}
         />
         <br />
         <input type="submit" value="Envoyer" />

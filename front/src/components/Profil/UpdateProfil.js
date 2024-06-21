@@ -12,6 +12,7 @@ const UpdateProfil = () => {
 
   const [updateForm, setUpdateForm] = useState(false);
   const [bio, setBio] = useState(userText || "");
+  const [preview, setPreview] = useState(userPic && userPic !== "null" ? userPic : "http://localhost:5000/images/avatar-no.png"); // Ajouter l'état de prévisualisation
 
   const handleUpdate = async () => {
     setUpdateForm(false);
@@ -22,7 +23,7 @@ const UpdateProfil = () => {
     };
 
     try {
-      const response = axios.put(
+      const response = await axios.put(
         `${process.env.REACT_APP_API_URL}api/user/updateUser`,
         data,
         {
@@ -55,14 +56,17 @@ const UpdateProfil = () => {
       <h1>Profil de {user}</h1>
       <div className="update-container">
         <div className="left-part">
-          <h3> Photo de profil</h3>
-          <img src={userPic} alt="user-pic" />
-          <UploadImg />
+          <h3>Photo de profil</h3>
+          <img
+            src={preview} // Utiliser l'état de prévisualisation
+            alt="user-pic"
+          />
+          <UploadImg setPreview={setPreview} />
         </div>
 
         <div className="right-part">
           <div className="description">
-            <h3>Decription</h3>
+            <h3>Description</h3>
             {updateForm === false && (
               <>
                 <p onClick={() => setUpdateForm(!updateForm)}>{userText}</p>
