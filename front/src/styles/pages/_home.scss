@@ -1,26 +1,21 @@
 .home {
-//    display: grid;
-//    max-width: 1200px;
     max-width: 700px;
-    grid-template-columns: 600px 1fr 374px;
-    overflow: hidden;
     margin: 100px auto 50px;
-    position: relative;
   
-    @media screen and (max-width: 990px) {
-      grid-template-columns: 60px 1fr;
-      margin: 58px 20px 50px
-    }
+    // @media screen and (max-width: 990px) {
+    //   grid-template-columns: 60px 1fr;
+    //   margin: 58px 20px 50px
+    // }
   
-    @media screen and (max-width: 590px) {
-      grid-template-columns: 1fr;
-      margin: 58px 8px 50px;
-    }
+    // @media screen and (max-width: 590px) {
+    //   grid-template-columns: 1fr;
+    //   margin: 58px 8px 50px;
+    // }
   
     .main {
       .home-header {
         margin: 0 auto 12px;
-        text-align: center;
+    //    text-align: center;
         
         .connection-form {
           background: $color-4;
