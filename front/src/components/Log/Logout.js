@@ -18,7 +18,7 @@ const Logout = () => {
       .then(() => removetoken())
       .catch((err) => console.log(err));
 
-    window.location = "/";
+    window.location = "/connexion";
   };
 
   return (

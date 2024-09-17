@@ -155,9 +155,9 @@ const Card = ({ post, reloadPosts }) => {
                 </div>
               )
             )}
-            <div className="card-footer">
+            {/* <div className="card-footer">
               <LikeButton />
-            </div>
+            </div> */}
             <CardComments postId={post.id} />
           </div>
         </>

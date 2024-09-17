@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import Thread from "../components/Thread";
 import NewPostForm from "../components/Post/NewPostForm";
-import Log from "../components/Log";
 import axios from "axios";
 
 const Home = () => {
-  const userId = localStorage.getItem("userId");
   const [posts, setPosts] = useState([]);
 
   const getPosts = () => {
@@ -21,11 +19,7 @@ const Home = () => {
     <div className="home">
       <div className="main">
         <div className="home-header">
-          {userId ? (
-            <NewPostForm getPosts={getPosts} />
-          ) : (
-            <Log signin={true} signup={false} />
-          )}
+          <NewPostForm getPosts={getPosts} />
         </div>
         <Thread getPosts={getPosts} posts={posts} />
       </div>

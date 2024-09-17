@@ -12,7 +12,11 @@ const UpdateProfil = () => {
 
   const [updateForm, setUpdateForm] = useState(false);
   const [bio, setBio] = useState(userText || "");
-  const [preview, setPreview] = useState(userPic && userPic !== "null" ? userPic : "http://localhost:5000/images/avatar-no.png"); // Ajouter l'état de prévisualisation
+  const [preview, setPreview] = useState(
+    userPic && userPic !== "null"
+      ? userPic
+      : "http://localhost:5000/images/avatar-no.png"
+  ); // Ajouter l'état de prévisualisation
 
   const handleUpdate = async () => {
     setUpdateForm(false);
@@ -69,7 +73,7 @@ const UpdateProfil = () => {
             <h3>Description</h3>
             {updateForm === false && (
               <>
-                <p onClick={() => setUpdateForm(!updateForm)}>{userText}</p>
+                <p onClick={() => setUpdateForm(!updateForm)}>{bio}</p>
                 <button onClick={() => setUpdateForm(!updateForm)}>
                   Modifier
                 </button>
@@ -79,10 +83,10 @@ const UpdateProfil = () => {
               <>
                 <textarea
                   type="text"
-                  defaultValue={userText}
+                  defaultValue={bio}
                   onChange={(e) => setBio(e.target.value)}
                 ></textarea>
-                <button onClick={handleUpdate}>Valider modifications</button>
+                <button onClick={handleUpdate}>Valider </button>
               </>
             )}
           </div>
