@@ -1,8 +1,6 @@
 const db_config = require("../config/db");
 const db = db_config.getDB();
 
-// CRUD post
-
 exports.createPost = (req, res, next) => {
   const { user_id, content } = req.body;
   let file = null;

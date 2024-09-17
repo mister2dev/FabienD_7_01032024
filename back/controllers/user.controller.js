@@ -1,8 +1,7 @@
 const db_config = require("../config/db");
 const db = db_config.getDB();
-const fs = require('fs');
-const path = require('path');
-
+const fs = require("fs");
+const path = require("path");
 
 exports.getOneUser = (req, res, next) => {
   const userId = req.params.id;
@@ -37,10 +36,8 @@ exports.updateUser = (req, res, next) => {
   const email = req.body.email;
   const description = req.body.bio;
 
-  // const sqlUpdateUser =
-  //   "UPDATE users SET username = ?, email = ?, description = ? WHERE id = ?";
-
   // Construction dynamique de la requête SQL
+
   let sqlUpdateUser = "UPDATE users SET ";
   const params = [];
 
@@ -56,27 +53,19 @@ exports.updateUser = (req, res, next) => {
     sqlUpdateUser += "description = ?, ";
     params.push(description);
   }
-
-  // Suppression de la dernière virgule et espace
-  sqlUpdateUser = sqlUpdateUser.slice(0, -2);
-
+  sqlUpdateUser = sqlUpdateUser.slice(0, -2); // Suppression de la dernière virgule et espace
   sqlUpdateUser += " WHERE id = ?";
   params.push(userId);
 
-  db.query(
-    sqlUpdateUser,
-    params,
-    //[username, email, description, userId],
-    (err, result) => {
-      if (err) {
-        res.status(404).json({ err });
-        throw err;
-      }
-      if (result) {
-        res.status(200).json(result);
-      }
+  db.query(sqlUpdateUser, params, (err, result) => {
+    if (err) {
+      res.status(404).json({ err });
+      throw err;
     }
-  );
+    if (result) {
+      res.status(200).json(result);
+    }
+  });
 };
 
 exports.updatePicture = (req, res, next) => {
@@ -87,38 +76,44 @@ exports.updatePicture = (req, res, next) => {
     file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
   }
 
-   // Requête SQL pour obtenir le chemin de l'ancienne image
-   const sqlGetOldImage = "SELECT attachment FROM users WHERE id = ?";
+  //--------Requête SQL pour obtenir le chemin de l'ancienne image--------//
 
-   db.query(sqlGetOldImage, [userId], (err, result) => {
-     if (err) {
-       res.status(500).json({ err });
-       throw err;
-     }
- 
-     if (result.length > 0 && result[0].attachment) {
-       const oldImagePath = path.join(__dirname, '../images', path.basename(result[0].attachment));
- 
-       // Supprimer l'ancienne image si elle existe
-       if (fs.existsSync(oldImagePath)) {
-         fs.unlinkSync(oldImagePath);
-       }
-     }
- 
-     // Mettre à jour l'image de profil dans la base de données
-     const sqlUpdateUser = "UPDATE users SET attachment = ? WHERE id = ?";
- 
-     db.query(sqlUpdateUser, [file, userId], (err, result) => {
-       if (err) {
-         res.status(404).json({ err });
-         throw err;
-       }
-       if (result) {
-         res.status(200).json({ result, file });
-       }
-     });
-   });
- };
+  const sqlGetOldImage = "SELECT attachment FROM users WHERE id = ?";
+
+  db.query(sqlGetOldImage, [userId], (err, result) => {
+    if (err) {
+      res.status(500).json({ err });
+      throw err;
+    }
+
+    if (result.length > 0 && result[0].attachment) {
+      const oldImagePath = path.join(
+        __dirname,
+        "../images",
+        path.basename(result[0].attachment)
+      );
+
+      // Supprimer l'ancienne image si elle existe
+      if (fs.existsSync(oldImagePath)) {
+        fs.unlinkSync(oldImagePath);
+      }
+    }
+
+    // Mettre à jour l'image de profil dans la base de données
+    const sqlUpdateUser = "UPDATE users SET attachment = ? WHERE id = ?";
+
+    db.query(sqlUpdateUser, [file, userId], (err, result) => {
+      if (err) {
+        res.status(404).json({ err });
+        throw err;
+      }
+      if (result) {
+        res.status(200).json({ result, file });
+      }
+    });
+  });
+};
+
 exports.deleteUser = (req, res) => {
   const userId = req.params.id;
   const sql = `DELETE FROM users WHERE id = ?`;

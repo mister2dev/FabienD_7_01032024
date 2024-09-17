@@ -1,8 +1,6 @@
 const dbc = require("../config/db");
 const db = dbc.getDB();
 
-// CRUD comments
-
 exports.createComment = (req, res, next) => {
   const { id, user_id, post_id, content } = req.body;
   const sql = `INSERT INTO comments (id, user_id, post_id, content) VALUES (NULL, ${user_id}, ${post_id}, "${content}")`;
