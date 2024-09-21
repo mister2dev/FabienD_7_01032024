@@ -6,9 +6,14 @@ const DeleteComment = ({ comment, reloadComments, userData }) => {
   const userId = localStorage.getItem("userId");
 
   const handleDelete = () => {
+    const token = localStorage.getItem("token");
+
     axios({
       method: "delete",
       url: `${process.env.REACT_APP_API_URL}api/comment/${comment.id}`,
+      headers: {
+        Authorization: `Bearer ${token}`, // Ajout du token dans l'en-tête Authorization
+      },
     })
       .then((res) => {
         console.log("Comment deleted:", res.data);

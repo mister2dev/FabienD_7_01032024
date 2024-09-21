@@ -29,8 +29,14 @@ const CardComments = ({ postId }) => {
   }, [userId]);
 
   const getComments = useCallback(() => {
+    const token = localStorage.getItem("token");
+
     axios
-      .get(`${process.env.REACT_APP_API_URL}api/comment/` + postId)
+      .get(`${process.env.REACT_APP_API_URL}api/comment/` + postId, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Ajout du token dans l'en-tête Authorization
+        },
+      })
       .then((res) => {
         console.log("res.data", res.data);
         setComments(res.data);
@@ -45,6 +51,8 @@ const CardComments = ({ postId }) => {
   }, [getUsersData, getUserData, getComments]);
 
   const handleComment = (e) => {
+    const token = localStorage.getItem("token");
+
     e.preventDefault();
     if (text) {
       axios({
@@ -54,6 +62,9 @@ const CardComments = ({ postId }) => {
           user_id: userId,
           post_id: postId,
           content: text,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`, // Ajout du token dans l'en-tête Authorization
         },
       })
         .then((res) => {

@@ -7,8 +7,14 @@ const Home = () => {
   const [posts, setPosts] = useState([]);
 
   const getPosts = () => {
+    const token = localStorage.getItem("token");
+
     return axios
-      .get(`${process.env.REACT_APP_API_URL}api/post/`)
+      .get(`${process.env.REACT_APP_API_URL}api/post/`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Ajout du token dans l'en-tête Authorization
+        },
+      })
       .then((res) => {
         setPosts(res.data);
       })

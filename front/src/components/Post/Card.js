@@ -12,6 +12,7 @@ const Card = ({ post, reloadPosts }) => {
   const [usersData, setUsersData] = useState([]);
   const [userData, setUserData] = useState([]);
   const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
   //const [attachmentUpdate, setAttachmentUpdate] = useState();
 
   const updateItem = () => {
@@ -24,6 +25,9 @@ const Card = ({ post, reloadPosts }) => {
         method: "put",
         url: `${process.env.REACT_APP_API_URL}api/post/${post.id}`,
         data: { file: post.attachment, content: textUpdate },
+        headers: {
+          Authorization: `Bearer ${token}`, // Ajout du token dans l'en-tête Authorization
+        },
       })
         .then((res) => {
           console.log("res.data de updateItem :", res.data);

@@ -20,6 +20,8 @@ const UploadImg = ({ setPreview }) => {
       return;
     }
 
+    const token = localStorage.getItem("token");
+
     const data = new FormData();
     data.append("userId", userId);
     data.append("image", file);
@@ -29,6 +31,9 @@ const UploadImg = ({ setPreview }) => {
         `${process.env.REACT_APP_API_URL}api/user/updatePicture`,
         data,
         {
+          headers: {
+            Authorization: `Bearer ${token}`, // Ajout du token dans les en-têtes d'autorisation
+          },
           withCredentials: false,
         }
       );

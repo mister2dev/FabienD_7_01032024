@@ -18,6 +18,7 @@ const NewPostForm = ({ getPosts }) => {
   };
 
   const handlePost = async () => {
+    const token = localStorage.getItem("token");
     if (message || postPicture || video) {
       const formData = new FormData();
       formData.append("user_id", userId);
@@ -28,6 +29,9 @@ const NewPostForm = ({ getPosts }) => {
         method: "post",
         url: `${process.env.REACT_APP_API_URL}api/post/`,
         data: formData,
+        headers: {
+          Authorization: `Bearer ${token}`, // Ajout du token dans l'en-tête Authorization
+        },
       })
         .then(() => {
           getPosts();

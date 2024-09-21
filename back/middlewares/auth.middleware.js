@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 module.exports = (req, res, next) => {
   try {
     console.log("req.body.id :", req.body.id);
+    console.log("test :", req.headers.authorization);
     const token = req.headers.authorization.split(" ")[1];
     console.log("tokenauth :", token);
 
@@ -16,6 +17,7 @@ module.exports = (req, res, next) => {
       next();
     }
   } catch (error) {
+    console.log("error quoi :", error);
     res.status(401).json({ error: error || "Requête non authentifiée !" });
   }
 };

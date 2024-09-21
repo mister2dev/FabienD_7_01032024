@@ -3,9 +3,13 @@ import axios from "axios";
 
 const DeleteCard = ({ post, reloadPosts }) => {
   const deleteQuote = () => {
+    const token = localStorage.getItem("token");
     return axios({
       method: "delete",
       url: `${process.env.REACT_APP_API_URL}api/post/${post.id}`,
+      headers: {
+        Authorization: `Bearer ${token}`, // Ajout du token dans l'en-tête Authorization
+      },
     })
       .then((res) => {
         console.log("res.data de updateItem :", res.data);

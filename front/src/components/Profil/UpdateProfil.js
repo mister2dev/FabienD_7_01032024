@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import UploadImg from "./UploadImg";
 import { dateParser } from "../Utils";
 import axios from "axios";
+const token = localStorage.getItem("token");
 
 const UpdateProfil = () => {
   const user = localStorage.getItem("user");
@@ -31,6 +32,9 @@ const UpdateProfil = () => {
         `${process.env.REACT_APP_API_URL}api/user/updateUser`,
         data,
         {
+          headers: {
+            Authorization: `Bearer ${token}`, // Ajout du token dans les en-têtes d'autorisation
+          },
           withCredentials: false,
         }
       );
@@ -47,12 +51,38 @@ const UpdateProfil = () => {
     localStorage.setItem("description", bio);
   };
 
-  const desactivateAccount = () => {
-    axios.post(`http://localhost:5000/api/auth/desactivate/${userId}`);
+  const desactivateAccount = async () => {
+    const isConfirmed = window.confirm(
+      "Voulez-vous vraiment désactiver le compte ?"
+    );
+    if (!isConfirmed) return;
 
-    if (!window.confirm(`Voulez-vous vraiment désactiver le compte ?`)) return;
-    localStorage.clear();
-    window.location.href = "/connexion";
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/api/auth/desactivate/${userId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: false,
+        }
+      );
+
+      // Si la désactivation est réussie
+      if (response.status === 200) {
+        localStorage.clear();
+        window.location.href = "/connexion";
+      } else {
+        // Gestion d'une réponse inattendue
+        console.error("Échec de la désactivation du compte :", response.data);
+        alert("Une erreur est survenue lors de la désactivation du compte.");
+      }
+    } catch (error) {
+      // Gestion des erreurs de requête
+      console.error("Erreur lors de la désactivation du compte :", error);
+      alert("Impossible de désactiver le compte. Veuillez réessayer.");
+    }
   };
 
   return (
