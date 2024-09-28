@@ -55,6 +55,7 @@ CREATE TABLE `posts` (
   `user_id` int NOT NULL,
   `content` text NOT NULL,
   `attachment` varchar(255) DEFAULT NULL,
+  `video` varchar(255) DEFAULT NULL,
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -83,6 +84,7 @@ CREATE TABLE `users` (
   `username` varchar(255) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
   `attachment` varchar(255) DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT '1',
   `is_admin` tinyint(1) DEFAULT '0',

@@ -10,7 +10,7 @@ const SignUpForm = () => {
   const [error, setError] = useState("");
 
   const handleRegister = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); //Evite le comportement par defaut, que la page se recharge apres un submit
 
     try {
       const response = await axios.post(
@@ -30,6 +30,7 @@ const SignUpForm = () => {
         setError(response.data.error); // Stocker le message d'erreur dans l'état
       }
 
+      //SetFormSubmit permet de vérifier que l'inscription est validée et ensuite de baculer sur connexion
       if (response.data.error && response.data.error.includes("créé")) {
         setFormSubmit(true);
         setError("");

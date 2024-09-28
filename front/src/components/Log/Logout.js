@@ -1,12 +1,11 @@
 import React from "react";
 import axios from "axios";
 
+// On supprime le contenu du local storage pour ne plus avoir de token
+
 const Logout = () => {
   const removetoken = () => {
-    if (typeof window !== "undefined") {
-      //localStorage.removeItem("token");
-      localStorage.clear();
-    }
+    localStorage.clear();
   };
 
   const handleLogout = async () => {

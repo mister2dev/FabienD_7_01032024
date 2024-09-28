@@ -13,11 +13,13 @@ const UpdateProfil = () => {
 
   const [updateForm, setUpdateForm] = useState(false);
   const [bio, setBio] = useState(userText || "");
+
+  // Ajouter l'état de prévisualisation
   const [preview, setPreview] = useState(
     userPic && userPic !== "null"
       ? userPic
-      : "http://localhost:5000/images/avatar-no.png"
-  ); // Ajouter l'état de prévisualisation
+      : "http://localhost:5000/images/avatar-no.png" // Image utilisateur par defaut
+  );
 
   const handleUpdate = async () => {
     setUpdateForm(false);
@@ -41,12 +43,6 @@ const UpdateProfil = () => {
 
       console.log("data :", data);
       console.log("response :", response);
-
-      // if (response.data.error) {
-      //   setError(response.data.error); // Stocker le message d'erreur dans l'état
-      // } else {
-      //   // Mettez à jour le stockage local ou l'état avec le nouveau chemin de l'image
-      // }
     } catch (error) {}
     localStorage.setItem("description", bio);
   };

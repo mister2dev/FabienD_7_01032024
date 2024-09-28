@@ -7,12 +7,9 @@ const SignInForm = () => {
   const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); //Evite le comportement par defaut, que la page se recharge apres un submit
 
     try {
-      // const emailError = document.querySelector(".email.error");
-      // const passwordError = document.querySelector(".password.error");
-
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}api/auth/login`,
         {
@@ -35,12 +32,8 @@ const SignInForm = () => {
       localStorage.setItem("userPic", response.data.imagePath);
       localStorage.setItem("description", response.data.description);
       localStorage.setItem("createdAt", response.data.createdAt);
-      // if (response.data.errors) {
-      //   emailError.innerHTML = response.data.errors.email;
-      //   passwordError.innerHTML = response.data.errors.password;
-      // } else {
+
       window.location = "/";
-      //}
     } catch (error) {
       if (error.response) {
         // La requête a été reçue par le serveur, mais il a renvoyé un code d'erreur

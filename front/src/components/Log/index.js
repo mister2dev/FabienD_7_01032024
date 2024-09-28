@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
 
-const Log = (props) => {
-  const [signUpModal, setSignUpModal] = useState(props.signup);
-  const [signInModal, setSignInModal] = useState(props.signin);
+const Log = () => {
+  const [signUpModal, setSignUpModal] = useState();
+  const [signInModal, setSignInModal] = useState();
+
+  // Mise en place des modals inscription ou connexion
 
   const handleModals = (e) => {
     if (e.target.id === "register") {
@@ -24,18 +26,10 @@ const Log = (props) => {
 
       <div className="form-container">
         <ul>
-          <li
-            onClick={handleModals}
-            id="register"
-            className={signUpModal ? "active-btn" : null}
-          >
+          <li onClick={handleModals} id="register">
             Inscription
           </li>
-          <li
-            onClick={handleModals}
-            id="login"
-            className={signInModal ? "active-btn" : null}
-          >
+          <li onClick={handleModals} id="login">
             Connexion
           </li>
         </ul>

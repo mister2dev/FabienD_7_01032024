@@ -1,5 +1,7 @@
 const multer = require("multer");
 
+// On configure Multer pour gérer l'upload de fichiers d'image dans l'application
+
 const MIME_TYPES = {
   "image/jpg": "jpg",
   "image/jpeg": "jpg",
