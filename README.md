@@ -75,7 +75,7 @@ SOURCE database/groupomania.sql
 
 ### Backend
 
-- Ajouter le fichier .env dans le dossier ./backend/, avec les variables :
+- Ajouter le fichier .env dans le dossier ./back/, avec les variables :
 
 ```
 PORT=5000
@@ -96,7 +96,7 @@ node server
 - initialisation et démarrage du frontend (React doit être installé sur la machine)
 
 ```bash
-cd frontend # Aller dans le dossier "frontend"
+cd front # Aller dans le dossier "frontend"
 npm install # Installer les dépendances
 yarn start # lancer le frontend
 ```
