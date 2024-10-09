@@ -44,20 +44,11 @@ Le client Groupomania est un groupe spécialisé dans la grande distribution et 
 - Utiliser une base de donnée avec mySQL pour enregistrer les utilisateurs, leurs posts et leurs commentaires.
 - Sécuriser l'API.
 - Mettre en œuvre des opérations CRUD de manière sécurisée.
-- Mettre en place le frontend avec un framework comme React,Angular ou Vue.
+- Mettre en place le frontend avec le framework React.
 
 ## Installation
 
-## Front
-
-- Cloner le repo
-- Ouvrir le terminal dans le dossier front et exécuter `npm install` pour installer les dépendances.
-- Exécuter `npm install node-sass` pour installer sass.
-- Le projet a été généré avec Angular CLI version 7.0.2.
-- Démarrer `ng serve`.
-- Rendez-vous sur http://localhost:4200.
-
-2. **Préparer la base de données MySQL**
+### **Préparer la base de données MySQL**
 
 - Se connecter à MySQL :
 
@@ -82,7 +73,7 @@ mysql -u root -p Groupomania
 SOURCE database/groupomania.sql
 ```
 
-## Back
+### Backend
 
 - Ajouter le fichier .env dans le dossier ./backend/, avec les variables :
 
@@ -99,7 +90,7 @@ npm install
 node server
 ```
 
-4. **Frontend**
+### Frontend
 
 - Ouvrir un nouveau terminal
 - initialisation et démarrage du frontend (React doit être installé sur la machine)
