@@ -50,16 +50,15 @@ Le client Groupomania est un groupe spécialisé dans la grande distribution et 
 
 ### **Préparer la base de données MySQL**
 
-- Se connecter à MySQL :
+- Se connecter à MySQL depuis l'invite de commande :
 
 ```bash
 mysql -u root -p
 ```
 
-- Une fois dans MySQL
+- Une fois dans MySQL, créer une nouvelle base de donnée avec le nom souhaité
 
 ```sql
--- Créer une nouvelle base
 CREATE DATABASE Groupomania CHARACTER SET 'utf8';
 ```
 
@@ -69,13 +68,15 @@ CREATE DATABASE Groupomania CHARACTER SET 'utf8';
 SOURCE database/groupomania.sql
 ```
 
+- Quitter mySQL puis dans l'invite de commande, taper ceci en remplaçant le chemin d'accés vers le fichier .sql:
+
 ```bash
-# Dans l'invite de commande, tapez ceci en remplaçant le chemin d'accés vers le fichier .sql:
 mysql -u root -p groupomania < /chemin/vers/fichier/groupomania.sql
 ```
 
+- Retourner dans mySQL et selectionnez votre base de donnée
+
 ```bash
-# Selectionnez votre base de donnée
 Use groupomania;
 ```
 
