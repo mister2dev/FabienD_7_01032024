@@ -63,14 +63,20 @@ mysql -u root -p
 CREATE DATABASE Groupomania CHARACTER SET 'utf8';
 ```
 
-```bash
-mysql -u root -p Groupomania
-```
-
-- Ajouter les tables à la nouvelle base grace au fichier **CreationBDD.sql**
+- Ajouter les tables à la nouvelle base grace au fichier **groupomania.sql**
 
 ```sql
 SOURCE database/groupomania.sql
+```
+
+```bash
+# Dans l'invite de commande, tapez ceci en remplaçant le chemin d'accés vers le fichier .sql:
+mysql -u root -p groupomania < /chemin/vers/fichier/groupomania.sql
+```
+
+```bash
+# Selectionnez votre base de donnée
+Use groupomania;
 ```
 
 ### Backend
