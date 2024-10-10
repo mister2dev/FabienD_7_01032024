@@ -68,7 +68,7 @@ CREATE DATABASE Groupomania CHARACTER SET 'utf8';
 SOURCE database/groupomania.sql
 ```
 
-- Quitter MySQL puis dans l'invite de commande, taper ceci en remplaçant le chemin d'accés vers le fichier .sql:
+- Quitter MySQL puis dans l'invite de commande, taper ceci en remplaçant le chemin d'accés vers le fichier .sql
 
 ```bash
 mysql -u root -p groupomania < /chemin/vers/fichier/groupomania.sql
@@ -103,7 +103,7 @@ node server
 - Initialisation et démarrage du frontend (React doit être installé sur la machine)
 
 ```bash
-cd front # Aller dans le dossier "frontend"
-npm install # Installer les dépendances
-yarn start ou npm start # lancer le frontend
+cd front
+npm install
+yarn start # (ou npm start) Lancer le frontend
 ```
