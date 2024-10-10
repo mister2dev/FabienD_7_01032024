@@ -62,19 +62,19 @@ mysql -u root -p
 CREATE DATABASE Groupomania CHARACTER SET 'utf8';
 ```
 
-- Ajouter les tables à la nouvelle base grace au fichier **groupomania.sql**
+- Ajouter les tables à la nouvelle base grâce au fichier **groupomania.sql**
 
 ```sql
 SOURCE database/groupomania.sql
 ```
 
-- Quitter mySQL puis dans l'invite de commande, taper ceci en remplaçant le chemin d'accés vers le fichier .sql:
+- Quitter MySQL puis dans l'invite de commande, taper ceci en remplaçant le chemin d'accés vers le fichier .sql:
 
 ```bash
 mysql -u root -p groupomania < /chemin/vers/fichier/groupomania.sql
 ```
 
-- Retourner dans mySQL et selectionnez votre base de donnée
+- Retourner dans MySQL et selectionnez votre base de donnée
 
 ```bash
 Use groupomania;
@@ -89,7 +89,7 @@ PORT=5000
 JWT_TOKEN=a0e141b8-e49c-43af-87fb-28542d6d83ff
 ```
 
-- initialisation et démarrage du backend
+- Initialisation et démarrage du backend
 
 ```bash
 cd back
@@ -100,10 +100,10 @@ node server
 ### Frontend
 
 - Ouvrir un nouveau terminal
-- initialisation et démarrage du frontend (React doit être installé sur la machine)
+- Initialisation et démarrage du frontend (React doit être installé sur la machine)
 
 ```bash
 cd front # Aller dans le dossier "frontend"
 npm install # Installer les dépendances
-yarn start # lancer le frontend
+yarn start ou npm start # lancer le frontend
 ```
