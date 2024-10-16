@@ -21,6 +21,7 @@ const Log = () => {
   return (
     <div className="connection-form">
       <div className="img-container"></div>
+      {/* Affichage conditionnel en fonction de l'état */}
       {signUpModal && <SignUpForm />}
       {signInModal && <SignInForm />}
 

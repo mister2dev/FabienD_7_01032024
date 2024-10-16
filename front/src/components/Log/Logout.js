@@ -1,23 +1,10 @@
 import React from "react";
-import axios from "axios";
 
 // On supprime le contenu du local storage pour ne plus avoir de token
-
 const Logout = () => {
-  const removetoken = () => {
-    localStorage.clear();
-  };
-
-  const handleLogout = async () => {
-    await axios({
-      method: "get",
-      url: `${process.env.REACT_APP_API_URL}api/auth/logout`,
-      withCredentials: false,
-    })
-      .then(() => removetoken())
-      .catch((err) => console.log(err));
-
-    window.location = "/connexion";
+  const handleLogout = () => {
+    localStorage.clear(); // On supprime tout le local storage (y compris le token)
+    window.location = "/"; // On redirige vers la page d'accueil
   };
 
   return (

@@ -24,7 +24,7 @@ const SignInForm = () => {
       if (response.data.error) {
         setError(response.data.error); // Stocker le message d'erreur dans l'état
       }
-
+      // Stockage des informations du backend dans le localStorage
       console.log("Réponse :", response.data);
       localStorage.setItem("userId", response.data.userId);
       localStorage.setItem("user", response.data.user);
@@ -33,7 +33,7 @@ const SignInForm = () => {
       localStorage.setItem("description", response.data.description);
       localStorage.setItem("createdAt", response.data.createdAt);
 
-      window.location = "/";
+      window.location = "/home";
     } catch (error) {
       if (error.response) {
         // La requête a été reçue par le serveur, mais il a renvoyé un code d'erreur
@@ -65,7 +65,7 @@ const SignInForm = () => {
           onChange={(e) => setEmail(e.target.value)}
           value={email}
         />
-        <div className="email error"></div>
+        <br />
         <label htmlFor="password"></label>
         <br />
         <input
@@ -76,7 +76,7 @@ const SignInForm = () => {
           onChange={(e) => setPassword(e.target.value)}
           value={password}
         />
-        <div className="password error"></div>
+        <br />
         <br />
         <br />
         <input type="submit" value="Suivant" />

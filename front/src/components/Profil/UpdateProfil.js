@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import UploadImg from "./UploadImg";
 import { dateParser } from "../Utils";
 import axios from "axios";
-const token = localStorage.getItem("token");
 
 const UpdateProfil = () => {
   const user = localStorage.getItem("user");
@@ -10,20 +9,23 @@ const UpdateProfil = () => {
   const userId = localStorage.getItem("userId");
   const userText = localStorage.getItem("description");
   const userDate = localStorage.getItem("createdAt");
+  const token = localStorage.getItem("token");
 
   const [updateForm, setUpdateForm] = useState(false);
   const [bio, setBio] = useState(userText || "");
 
-  // Ajouter l'état de prévisualisation
+  // Prévisualisation de l'icone utilisateur
   const [preview, setPreview] = useState(
     userPic && userPic !== "null"
       ? userPic
-      : "http://localhost:5000/images/avatar-no.png" // Image utilisateur par defaut
+      : // Image utilisateur par defaut
+        "http://localhost:5000/images/avatar-no.png"
   );
 
   const handleUpdate = async () => {
     setUpdateForm(false);
 
+    // Mise à jour de la description
     const data = {
       userId: userId,
       bio: bio,
@@ -35,7 +37,8 @@ const UpdateProfil = () => {
         data,
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Ajout du token dans les en-têtes d'autorisation
+            // Ajout du token dans les en-têtes d'autorisation
+            Authorization: `Bearer ${token}`,
           },
           withCredentials: false,
         }
@@ -43,8 +46,11 @@ const UpdateProfil = () => {
 
       console.log("data :", data);
       console.log("response :", response);
-    } catch (error) {}
-    localStorage.setItem("description", bio);
+      // Mise à jour de la description dans le localStorage seulement si la requête est réussie
+      localStorage.setItem("description", bio);
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour :", error);
+    }
   };
 
   const desactivateAccount = async () => {
@@ -65,10 +71,10 @@ const UpdateProfil = () => {
         }
       );
 
-      // Si la désactivation est réussie
+      // Si la désactivation est réussie, retour à la page de connexion
       if (response.status === 200) {
         localStorage.clear();
-        window.location.href = "/connexion";
+        window.location.href = "/";
       } else {
         // Gestion d'une réponse inattendue
         console.error("Échec de la désactivation du compte :", response.data);
@@ -97,6 +103,7 @@ const UpdateProfil = () => {
         <div className="right-part">
           <div className="description">
             <h3>Description</h3>
+            {/* Si updateForm est à 0, on affiche la description */}
             {updateForm === false && (
               <>
                 <p onClick={() => setUpdateForm(!updateForm)}>{bio}</p>
@@ -105,6 +112,7 @@ const UpdateProfil = () => {
                 </button>
               </>
             )}
+            {/* Si updateForm est à 1, on passe en mode textarea pour pouvoir enregistrer une nouvelle description */}
             {updateForm && (
               <>
                 <textarea

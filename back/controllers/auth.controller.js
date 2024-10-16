@@ -11,6 +11,7 @@ exports.signup = async (req, res) => {
     const { password } = req.body;
     const encryptedPassword = await bcrypt.hash(password, 10); // Utilisation de bcrypt pour hasher le mot de passe en 10 passes
 
+    // On récupère l'objet user en y ajoutant encryptedPassword et attachment qui est l'icone par défaut ici
     const user = {
       ...req.body,
       password: encryptedPassword,
@@ -18,10 +19,8 @@ exports.signup = async (req, res) => {
     };
     const sql = "INSERT INTO users SET ?";
 
-    //console.log("user :", user);
-
+    // Envoi vers la base de donnée avec test de doublon
     db.query(sql, user, (err, result) => {
-      // Envoi vers la base de donnée avec test de doublon
       console.log("reponse sql :", result, err);
       if (err) {
         if (err.errno == 1062 && err.sqlMessage.includes("username"))
@@ -44,9 +43,8 @@ exports.login = (req, res) => {
   const { email, password: clearPassword } = req.body;
   const sql = `SELECT id, username, password, is_active, description, attachment, is_admin, createdAt FROM users WHERE email=?`;
 
+  // Test si l'utilisateur existe dans la base de donnée
   db.query(sql, email, async (err, results) => {
-    //  Test si l'utilisateur existe dans la base de donnée
-
     if (err) {
       return res.status(404).json({ err });
     }
@@ -55,7 +53,6 @@ exports.login = (req, res) => {
     }
 
     //--------Test si l'utilisateur est actif--------//
-
     if (results[0].is_active !== 1) {
       return res.status(401).json({
         error: true,
@@ -65,7 +62,6 @@ exports.login = (req, res) => {
     }
 
     //--------Vérification et comparaison du mot de passe avec le hashage--------//
-
     if (results[0]) {
       try {
         const { password: hashedPassword } = results[0];
@@ -75,17 +71,17 @@ exports.login = (req, res) => {
         console.log("test password :", match);
 
         if (match) {
-          // Si les mots de passe match alors on genere un JWT token
+          // Si les mots de passe correspondent alors on génère un JWT token
           const user = results[0].username;
           const userId = results[0].id;
           const imagePath = results[0].attachment;
           const description = results[0].description;
           const admin = results[0].is_admin;
           const createdAt = results[0].createdAt;
+
           console.log("userId :", userId);
 
-          //--------Création du token avec le userId et le token de la variable d'environnement--------//
-
+          // Création du token avec le userId et le token de la variable d'environnement
           const maxAge = "24h";
           const token = jwt.sign({ userId: userId }, process.env.JWT_TOKEN, {
             expiresIn: maxAge,
@@ -104,7 +100,7 @@ exports.login = (req, res) => {
 
           console.log("jwt :", user, token);
         } else {
-          // Et si les mots de passe ne match pas, on envoie une erreur
+          // Si les mots de passe ne correspondent pas, on envoie un message d'erreur
           res.status(401).json({
             error: true,
             error: "Mot de passe incorrect",
@@ -128,11 +124,4 @@ exports.desactivateAccount = (req, res) => {
     }
     res.status(200).json("Votre compte a bien été desactivé");
   });
-};
-
-exports.logout = (req, res) => {
-  const nullToken = jwt.sign({}, process.env.JWT_TOKEN, { expiresIn: 0 });
-
-  // On envoie un token null au client pour le remplacer dans le local storage et forcer le delog
-  res.status(200).json({ token: nullToken });
 };

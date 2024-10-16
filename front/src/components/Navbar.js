@@ -9,11 +9,11 @@ const Navbar = () => {
     <nav>
       <div className="nav-container">
         <div className="logo">
-          {/* <NavLink to="/"> */}
-          <div className="logo">
-            <img src="./img/icon-left-font-bis.png" alt="icon" />
-          </div>
-          {/* </NavLink> */}
+          <NavLink to="/home">
+            <div className="logo">
+              <img src="./img/icon-left-font-bis.png" alt="icon" />
+            </div>
+          </NavLink>
         </div>
         {localStorage.token ? (
           <ul>
@@ -32,7 +32,7 @@ const Navbar = () => {
           <ul>
             <li></li>
             <li>
-              <NavLink to="/connexion">
+              <NavLink to="/">
                 <img src="./img/login.svg" alt="login" />
               </NavLink>
             </li>

@@ -1,3 +1,4 @@
+// Formatage du texte à afficher pour la date
 export const dateParser = (num) => {
   let options = {
     // hour: "2-digit",
@@ -34,6 +35,7 @@ export const commentDateParser = (num) => {
   return date.toString();
 };
 
+// Vérification d'un champ vide
 export const isEmpty = (value) => {
   return (
     value === undefined ||

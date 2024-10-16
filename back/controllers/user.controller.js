@@ -76,8 +76,7 @@ exports.updatePicture = (req, res, next) => {
     file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
   }
 
-  //--------Requête SQL pour obtenir le chemin de l'ancienne image--------//
-
+  // Requête SQL pour obtenir le chemin de l'ancienne image
   const sqlGetOldImage = "SELECT attachment FROM users WHERE id = ?";
 
   db.query(sqlGetOldImage, [userId], (err, result) => {
@@ -114,15 +113,15 @@ exports.updatePicture = (req, res, next) => {
   });
 };
 
-exports.deleteUser = (req, res) => {
-  const userId = req.params.id;
-  const sql = `DELETE FROM users WHERE id = ?`;
+// exports.deleteUser = (req, res) => {
+//   const userId = req.params.id;
+//   const sql = `DELETE FROM users WHERE id = ?`;
 
-  db.query(sql, userId, (err, result) => {
-    if (err) {
-      res.status(400).json(err);
-      throw err;
-    }
-    res.status(200).json({ message: "Votre compte a bien été supprimé !" });
-  });
-};
+//   db.query(sql, userId, (err, result) => {
+//     if (err) {
+//       res.status(400).json(err);
+//       throw err;
+//     }
+//     res.status(200).json({ message: "Votre compte a bien été supprimé !" });
+//   });
+// };

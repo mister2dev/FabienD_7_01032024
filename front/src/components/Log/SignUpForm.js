@@ -10,8 +10,9 @@ const SignUpForm = () => {
   const [error, setError] = useState("");
 
   const handleRegister = async (e) => {
-    e.preventDefault(); //Evite le comportement par defaut, que la page se recharge apres un submit
+    e.preventDefault(); //Evite le comportement par defaut, c'est à dire que la page se recharge apres un submit
 
+    // On envoie les informations au backend via axios
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}api/auth/signup`,
@@ -44,6 +45,7 @@ const SignUpForm = () => {
   };
 
   return (
+    // Utilisation des fragments lorsque plusieurs éléments sont ajoutés en html avec react
     <>
       {formSubmit ? (
         <>
@@ -65,7 +67,7 @@ const SignUpForm = () => {
             onChange={(e) => setPseudo(e.target.value)}
             value={username}
           />
-          <div className="username error"></div>
+          <br />
           <label htmlFor="email"></label>
           <br />
           <input
@@ -76,7 +78,7 @@ const SignUpForm = () => {
             onChange={(e) => setEmail(e.target.value)}
             value={email}
           />
-          <div className="email error"></div>
+          <br />
           <label htmlFor="password"></label>
           <br />
           <input
@@ -87,12 +89,13 @@ const SignUpForm = () => {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />
-          <div className="password error"></div>
+          <br />
           <br />
           <br />
           <input type="submit" value="Suivant" />
         </form>
       )}
+      {/* Afficher le message d'erreur provenant du backend */}
       <div className="signupError">{error}</div>
     </>
   );

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { isEmpty } from "../Utils";
-import { NavLink } from "react-router-dom";
 import axios from "axios";
 
 const NewPostForm = ({ getPosts }) => {
@@ -11,12 +10,14 @@ const NewPostForm = ({ getPosts }) => {
   const [video, setVideo] = useState("");
   const [file, setFile] = useState();
 
+  // Prévisualisation de l'image et stockage dans l'état
   const handlePicture = (e) => {
     setPostPicture(URL.createObjectURL(e.target.files[0]));
     setFile(e.target.files[0]);
     setVideo("");
   };
 
+  // On génère un formulaire de données pour envoi au backend si il y a du texte, une image ou une vidéo
   const handlePost = async () => {
     const token = localStorage.getItem("token");
     if (message || postPicture || video) {
@@ -30,9 +31,10 @@ const NewPostForm = ({ getPosts }) => {
         url: `${process.env.REACT_APP_API_URL}api/post/`,
         data: formData,
         headers: {
-          Authorization: `Bearer ${token}`, // Ajout du token dans l'en-tête Authorization
+          Authorization: `Bearer ${token}`,
         },
       })
+        // Puis on recharge la page avec la mise à jour et on reinitialise les états
         .then(() => {
           getPosts();
           setMessage("");
@@ -48,11 +50,9 @@ const NewPostForm = ({ getPosts }) => {
 
   return (
     <div className="post-container">
-      <NavLink exact="true" to="/profil">
-        <div className="user-info">
-          <img src={userPicture} alt="user-img" />
-        </div>
-      </NavLink>
+      <div className="user-info">
+        <img src={userPicture} alt="user-img" />
+      </div>
       <div className="post-form">
         <textarea
           name="message"
@@ -75,6 +75,7 @@ const NewPostForm = ({ getPosts }) => {
         ) : null}
         <div className="footer-form">
           <div className="icon">
+            {/* S'il n'y a pas de vidéo de chargée, on propose le bouton charger une image */}
             {isEmpty(video) && (
               <>
                 <img src="./img/picture.svg" alt="img" />

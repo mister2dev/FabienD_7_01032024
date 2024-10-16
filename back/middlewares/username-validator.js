@@ -13,6 +13,6 @@ module.exports = checkUsername = (req, res, next) => {
     });
   }
 
-  // Si toutes les validations passent, passez à l'étape suivante
+  // Si toutes les validations sont vraies, on passe à l'étape suivante
   next();
 };

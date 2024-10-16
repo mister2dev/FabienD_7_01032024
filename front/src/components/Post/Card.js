@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { dateParser, isEmpty } from "../Utils";
-import LikeButton from "./LikeButton";
+// import LikeButton from "./LikeButton";
 import DeleteCard from "./DeleteCard";
 import CardComments from "./CardComments";
 
@@ -16,6 +16,7 @@ const Card = ({ post, reloadPosts }) => {
   //const [attachmentUpdate, setAttachmentUpdate] = useState();
 
   const updateItem = () => {
+    // Envoi de la mise à jour du texte si l'état textUpdate est non null
     if (textUpdate) {
       //setAttachmentUpdate(post.attachment);
       console.log("post1", post);
@@ -26,7 +27,7 @@ const Card = ({ post, reloadPosts }) => {
         url: `${process.env.REACT_APP_API_URL}api/post/${post.id}`,
         data: { file: post.attachment, content: textUpdate },
         headers: {
-          Authorization: `Bearer ${token}`, // Ajout du token dans l'en-tête Authorization
+          Authorization: `Bearer ${token}`,
         },
       })
         .then((res) => {
@@ -40,6 +41,7 @@ const Card = ({ post, reloadPosts }) => {
     setIsUpdated(false);
   };
 
+  // Execution de la récuperation des données utilisateurs au premier chargement de la fonction
   useEffect(() => {
     const getUsersData = () => {
       axios
@@ -53,6 +55,7 @@ const Card = ({ post, reloadPosts }) => {
     getUsersData();
   }, []);
 
+  // Execution de la récuperation des données d'un utilisateur dès que l'userId change
   useEffect(() => {
     const getUserData = () => {
       axios
@@ -66,6 +69,7 @@ const Card = ({ post, reloadPosts }) => {
     getUserData();
   }, [userId]);
 
+  // On desactive le loader dès que les données utilisateurs sont chargées ou changent dans l'état
   useEffect(() => {
     if (!isEmpty(usersData)) {
       setIsLoading(false);
@@ -83,12 +87,15 @@ const Card = ({ post, reloadPosts }) => {
           <div className="card-left">
             <img
               src={
+                // Vérification de la présence des données pour éviter une erreur
                 !isEmpty(usersData[0]) &&
+                // Affichage de la photo utilisateur si l'id correspond à l'user_id du post sinon rien
                 usersData
                   .map((user) => {
                     if (user.id === post.user_id) return user.attachment;
                     return null;
                   })
+                  // Utilisation de join pour fixer le problème des virgules générées par map dans le rendu
                   .join("")
               }
               alt="poster-pic"
@@ -107,6 +114,7 @@ const Card = ({ post, reloadPosts }) => {
                       .join("")}
                 </h3>
               </div>
+              {/* Formatage de la date */}
               <span>{dateParser(post.createdAt)}</span>
             </div>
             {isUpdated === false && <p>{post.content}</p>}
@@ -137,6 +145,7 @@ const Card = ({ post, reloadPosts }) => {
                 title={post._id}
               ></iframe>
             )} */}
+            {/* Implémentation des droits admin */}
             {userData.is_admin ? (
               <div className="button-container">
                 <DeleteCard
