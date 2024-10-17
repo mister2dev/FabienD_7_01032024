@@ -12,12 +12,12 @@ const DeleteComment = ({ comment, reloadComments, userData }) => {
       method: "delete",
       url: `${process.env.REACT_APP_API_URL}api/comment/${comment.id}`,
       headers: {
-        Authorization: `Bearer ${token}`, // Ajout du token dans l'en-tête Authorization
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => {
         console.log("Comment deleted:", res.data);
-        reloadComments(); // Call this function to refresh the comments list
+        reloadComments();
       })
       .catch((err) => console.log(err));
   };

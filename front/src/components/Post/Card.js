@@ -41,7 +41,7 @@ const Card = ({ post, reloadPosts }) => {
     setIsUpdated(false);
   };
 
-  // Execution de la récuperation des données utilisateurs au premier chargement de la fonction
+  // Execution de la récuperation des données utilisateurs uniquement au premier chargement de la fonction Card
   useEffect(() => {
     const getUsersData = () => {
       axios
@@ -69,7 +69,7 @@ const Card = ({ post, reloadPosts }) => {
     getUserData();
   }, [userId]);
 
-  // On desactive le loader dès que les données utilisateurs sont chargées ou changent dans l'état
+  // On desactive le loader dès que les données utilisateurs sont chargées
   useEffect(() => {
     if (!isEmpty(usersData)) {
       setIsLoading(false);
@@ -114,11 +114,11 @@ const Card = ({ post, reloadPosts }) => {
                       .join("")}
                 </h3>
               </div>
-              {/* Formatage de la date */}
+              {/* Affichage et formatage de la date */}
               <span>{dateParser(post.createdAt)}</span>
             </div>
             {isUpdated === false && <p>{post.content}</p>}
-            {isUpdated && (
+            {/* {isUpdated && (
               <div className="update-post">
                 <textarea
                   defaultValue={post.content}
@@ -130,7 +130,7 @@ const Card = ({ post, reloadPosts }) => {
                   </button>
                 </div>
               </div>
-            )}{" "}
+            )}{" "} */}
             {post.attachment && (
               <img src={post.attachment} alt="card-pic" className="card-pic" />
             )}
@@ -145,7 +145,7 @@ const Card = ({ post, reloadPosts }) => {
                 title={post._id}
               ></iframe>
             )} */}
-            {/* Implémentation des droits admin */}
+            {/* Implémentation des droits admin ou user pour la suppression d'un post*/}
             {userData.is_admin ? (
               <div className="button-container">
                 <DeleteCard
@@ -157,9 +157,9 @@ const Card = ({ post, reloadPosts }) => {
             ) : (
               userData.id === post.user_id && (
                 <div className="button-container">
-                  <div onClick={() => setIsUpdated(!isUpdated)}>
+                  {/* <div onClick={() => setIsUpdated(!isUpdated)}>
                     <img src="./img/edit.svg" alt="edit" />
-                  </div>
+                  </div> */}
                   <DeleteCard
                     post={post}
                     reloadPosts={reloadPosts}

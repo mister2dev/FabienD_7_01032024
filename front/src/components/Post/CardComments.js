@@ -34,7 +34,7 @@ const CardComments = ({ postId }) => {
     axios
       .get(`${process.env.REACT_APP_API_URL}api/comment/` + postId, {
         headers: {
-          Authorization: `Bearer ${token}`, // Ajout du token dans l'en-tête Authorization
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
@@ -64,12 +64,12 @@ const CardComments = ({ postId }) => {
           content: text,
         },
         headers: {
-          Authorization: `Bearer ${token}`, // Ajout du token dans l'en-tête Authorization
+          Authorization: `Bearer ${token}`,
         },
       })
         .then((res) => {
-          setText(""); // Clear the input field
-          getComments(); // Refresh the comments list
+          setText(""); // On efface le champ input
+          getComments(); // On raffraichit la liste des données
         })
         .catch((err) => console.log(err));
     }

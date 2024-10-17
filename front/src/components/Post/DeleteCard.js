@@ -8,7 +8,7 @@ const DeleteCard = ({ post, reloadPosts }) => {
       method: "delete",
       url: `${process.env.REACT_APP_API_URL}api/post/${post.id}`,
       headers: {
-        Authorization: `Bearer ${token}`, // Ajout du token dans l'en-tête Authorization
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => {
