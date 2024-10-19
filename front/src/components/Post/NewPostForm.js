@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { isEmpty } from "../Utils";
 import axios from "axios";
 
@@ -17,6 +17,25 @@ const NewPostForm = ({ getPosts }) => {
     setVideo("");
   };
 
+  useEffect(() => {
+    const handleVideo = () => {
+      let findLink = message.split(" ");
+      for (let i = 0; i < findLink.length; i++) {
+        if (
+          findLink[i].includes("https://www.yout") ||
+          findLink[i].includes("https://yout")
+        ) {
+          let embed = findLink[i].replace("watch?v=", "embed/");
+          setVideo(embed.split("&")[0]);
+          findLink.splice(i, 1);
+          setMessage(findLink.join(" "));
+          setPostPicture("");
+        }
+      }
+    };
+    handleVideo();
+  }, [message, video]);
+
   // On génère un formulaire de données pour envoi au backend si il y a du texte, une image ou une vidéo
   const handlePost = async () => {
     const token = localStorage.getItem("token");
@@ -25,6 +44,7 @@ const NewPostForm = ({ getPosts }) => {
       formData.append("user_id", userId);
       formData.append("content", message);
       if (file) formData.append("image", file);
+      formData.append("video", video);
 
       await axios({
         method: "post",
@@ -64,10 +84,19 @@ const NewPostForm = ({ getPosts }) => {
         {message || postPicture || video.length > 20 ? (
           <li className="card-container">
             <div className="card-right">
-              <div className="card-header">
+              <div className="card-new-header">
                 <div className="content">
                   <p>{message}</p>
                   <img src={postPicture} alt="" />
+                  {video && (
+                    <iframe
+                      src={video}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      title={video}
+                    ></iframe>
+                  )}
                 </div>
               </div>
             </div>
@@ -87,6 +116,9 @@ const NewPostForm = ({ getPosts }) => {
                   onChange={(e) => handlePicture(e)}
                 />
               </>
+            )}
+            {video && (
+              <button onClick={() => setVideo("")}>Supprimer video</button>
             )}
           </div>
           <div className="btn-send">

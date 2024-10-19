@@ -2,15 +2,15 @@ const db_config = require("../config/db");
 const db = db_config.getDB();
 
 exports.createPost = (req, res, next) => {
-  const { user_id, content } = req.body;
+  const { user_id, content, video } = req.body;
   let file = null;
 
   if (req.file) {
     file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
   }
-  const post = [user_id, content, file];
+  const post = [user_id, content, file, video];
   const sql =
-    "INSERT INTO posts (user_id, content, attachment) VALUES (?, ?, ?)";
+    "INSERT INTO posts (user_id, content, attachment, video) VALUES (?, ?, ?,?)";
 
   db.query(sql, post, (error, result) => {
     if (error) {

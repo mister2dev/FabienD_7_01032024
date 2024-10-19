@@ -134,7 +134,7 @@ const Card = ({ post, reloadPosts }) => {
             {post.attachment && (
               <img src={post.attachment} alt="card-pic" className="card-pic" />
             )}
-            {/* {post.video && (
+            {post.video && (
               <iframe
                 width="500"
                 height="300"
@@ -144,7 +144,7 @@ const Card = ({ post, reloadPosts }) => {
                 allowFullScreen
                 title={post._id}
               ></iframe>
-            )} */}
+            )}
             {/* Implémentation des droits admin ou user pour la suppression d'un post*/}
             {userData.is_admin ? (
               <div className="button-container">
