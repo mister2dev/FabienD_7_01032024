@@ -107,18 +107,22 @@ const NewPostForm = ({ getPosts }) => {
             {/* S'il n'y a pas de vidéo de chargée, on propose le bouton charger une image */}
             {isEmpty(video) && (
               <>
-                <img src="./img/picture.svg" alt="img" />
-                <input
-                  type="file"
-                  id="file-upload"
-                  name="file"
-                  accept=".jpg, .jpeg, .png"
-                  onChange={(e) => handlePicture(e)}
-                />
+                <div className="btn-pic">
+                  <img src="./img/picture2.svg" alt="img" />
+                  <input
+                    type="file"
+                    id="file-upload"
+                    name="file"
+                    accept=".jpg, .jpeg, .png"
+                    onChange={(e) => handlePicture(e)}
+                  />
+                </div>
               </>
             )}
             {video && (
-              <button onClick={() => setVideo("")}>Supprimer video</button>
+              <div className="btn-del-video" onClick={() => setVideo("")}>
+                <img src="./img/delete-video.svg" alt="video delete" />
+              </div>
             )}
           </div>
           <div className="btn-send">

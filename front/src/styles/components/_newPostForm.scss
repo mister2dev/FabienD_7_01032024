@@ -75,16 +75,42 @@
       width: 100%;
 
       .icon {
-        position: relative;
+        // position: relative;
         cursor: pointer;
-        width: 30px;
-        height: 20px;
+        // width: 30px;
+        // height: 20px;
 
-        img {
-          position: absolute;
-          height: 24px;
-          width: 24px;
-          transform: translate(0px, 8px);
+        // img {
+        //   position: absolute;
+        //   height: 24px;
+        //   width: 24px;
+        //   transform: translate(0px, 8px);
+        // }
+
+
+        .btn-del-video, .btn-pic {
+          background: #ffd0c4;
+          border-radius: 6px;
+          transition: 0.1s;
+          height: 42px;
+          width: 42px;
+          border: 1px solid black;
+          margin-top: 4px;
+
+          &:hover {
+            transform: scale(1.07);
+          }
+  
+          img {
+            // position: inherit;
+            // transform: inherit;
+            height: 40px;
+            width: 40px;
+          }
+        }
+        .btn-pic img {
+          height: 40px;
+          width: 22px;
         }
 
         button {
