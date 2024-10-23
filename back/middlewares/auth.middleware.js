@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {
   try {
-    console.log("test :", req.headers.authorization);
+    console.log("testauth :", req.headers.authorization);
     //On récupère le token de l'en-tête Authorization en supprimant Bearer
     const token = req.headers.authorization.split(" ")[1];
     console.log("tokenauth :", token);

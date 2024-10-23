@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { dateParser, isEmpty } from "../Utils";
-// import LikeButton from "./LikeButton";
+import LikeButton from "./LikeButton";
 import DeleteCard from "./DeleteCard";
 import CardComments from "./CardComments";
 
@@ -168,9 +168,9 @@ const Card = ({ post, reloadPosts }) => {
                 </div>
               )
             )}
-            {/* <div className="card-footer">
-              <LikeButton />
-            </div> */}
+            <div className="card-footer">
+              <LikeButton post={post} />
+            </div>
             <CardComments postId={post.id} />
           </div>
         </>
