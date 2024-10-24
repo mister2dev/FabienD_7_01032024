@@ -12,7 +12,7 @@ const LikeButton = ({ post }) => {
     const fetchLikes = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}api/post/likeCount`,
+          `${process.env.REACT_APP_API_URL}api/like/likeCount`,
           {
             params: { user_id: userId, post_id: post.id },
             headers: {
@@ -35,7 +35,7 @@ const LikeButton = ({ post }) => {
     try {
       if (isLiked) {
         await axios.post(
-          `${process.env.REACT_APP_API_URL}api/post/like`,
+          `${process.env.REACT_APP_API_URL}api/like/like`,
           { user_id: userId, post_id: post.id, like: -1 },
           {
             headers: {
@@ -46,7 +46,7 @@ const LikeButton = ({ post }) => {
         setLikeCount(likeCount - 1);
       } else {
         await axios.post(
-          `${process.env.REACT_APP_API_URL}api/post/like`,
+          `${process.env.REACT_APP_API_URL}api/like/like`,
           { user_id: userId, post_id: post.id, like: 1 },
           {
             headers: {
@@ -63,9 +63,14 @@ const LikeButton = ({ post }) => {
   };
 
   return (
-    <button onClick={handleLike}>
-      {isLiked ? "Unlike" : "Like"} {likeCount}
-    </button>
+    <div className="like-btn" onClick={handleLike}>
+      {isLiked ? (
+        <img src="./img/like.jpg" alt="like" />
+      ) : (
+        <img src="./img/unlike.jpg" alt="unlike" />
+      )}{" "}
+      {likeCount}
+    </div>
   );
 };
 
