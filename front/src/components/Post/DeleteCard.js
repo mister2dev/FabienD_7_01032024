@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 
-const DeleteCard = ({ post, reloadPosts }) => {
+const DeleteCard = ({ getPosts, post }) => {
   const deleteQuote = () => {
     const token = localStorage.getItem("token");
     return axios({
@@ -13,7 +13,7 @@ const DeleteCard = ({ post, reloadPosts }) => {
     })
       .then((res) => {
         console.log("res.data de updateItem :", res.data);
-        reloadPosts();
+        getPosts();
       })
       .catch((err) => console.log(err));
   };

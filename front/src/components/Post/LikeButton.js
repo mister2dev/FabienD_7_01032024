@@ -8,7 +8,7 @@ const LikeButton = ({ post }) => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    // Récupérer le nombre de likes
+    // On récupére le nombre de likes
     const fetchLikes = async () => {
       try {
         const response = await axios.get(
@@ -22,7 +22,7 @@ const LikeButton = ({ post }) => {
         );
         setLikeCount(response.data.LikesNumber);
 
-        // Vérifier si l'utilisateur actuel a déjà liké ce post
+        // On Vérifie si l'utilisateur actuel a déjà liké ce post
         setIsLiked(response.data.UserLike);
       } catch (err) {
         console.error(err);
@@ -33,6 +33,7 @@ const LikeButton = ({ post }) => {
 
   const handleLike = async () => {
     try {
+      // Si déjà liké par le user, on annule le like en bdd
       if (isLiked) {
         await axios.post(
           `${process.env.REACT_APP_API_URL}api/like/like`,
@@ -45,6 +46,7 @@ const LikeButton = ({ post }) => {
         );
         setLikeCount(likeCount - 1);
       } else {
+        // Sinon on l'ajoute
         await axios.post(
           `${process.env.REACT_APP_API_URL}api/like/like`,
           { user_id: userId, post_id: post.id, like: 1 },
@@ -68,7 +70,7 @@ const LikeButton = ({ post }) => {
         <img src="./img/like.jpg" alt="like" />
       ) : (
         <img src="./img/unlike.jpg" alt="unlike" />
-      )}{" "}
+      )}
       {likeCount}
     </div>
   );

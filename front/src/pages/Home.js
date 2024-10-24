@@ -7,7 +7,8 @@ const Home = () => {
   const [posts, setPosts] = useState([]);
 
   // Récuperation de tous les posts
-  const getPosts = () => {
+  const getPosts = (num) => {
+    console.log("num", num);
     const token = localStorage.getItem("token");
 
     return axios
@@ -18,8 +19,10 @@ const Home = () => {
         },
       })
       .then((res) => {
-        // Enregistrement des posts dans l'état
-        setPosts(res.data);
+        // tableau des posts 0 à num
+        const array = res.data.slice(0, num);
+        // Enregistrement du array dans l'état
+        setPosts(array);
       })
       .catch((err) => console.log(err));
   };

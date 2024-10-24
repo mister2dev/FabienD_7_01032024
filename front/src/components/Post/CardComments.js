@@ -38,7 +38,7 @@ const CardComments = ({ postId }) => {
         },
       })
       .then((res) => {
-        console.log("res.data", res.data);
+        console.log("res.data de getComments", res.data);
         setComments(res.data);
       })
       .catch((err) => console.log(err));

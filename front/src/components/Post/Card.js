@@ -5,41 +5,43 @@ import LikeButton from "./LikeButton";
 import DeleteCard from "./DeleteCard";
 import CardComments from "./CardComments";
 
-const Card = ({ post, reloadPosts }) => {
+const Card = ({ getPosts, post }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdated, setIsUpdated] = useState(false);
-  const [textUpdate, setTextUpdate] = useState(null);
+  // const [textUpdate, setTextUpdate] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [showComments, setShowComments] = useState(false);
   const [usersData, setUsersData] = useState([]);
   const [userData, setUserData] = useState([]);
   const userId = localStorage.getItem("userId");
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
   //const [attachmentUpdate, setAttachmentUpdate] = useState();
 
-  const updateItem = () => {
-    // Envoi de la mise à jour du texte si l'état textUpdate est non null
-    if (textUpdate) {
-      //setAttachmentUpdate(post.attachment);
-      console.log("post1", post);
-      //console.log("updateItem", attachmentUpdate);
+  // const updateItem = () => {
+  //   // Envoi de la mise à jour du texte si l'état textUpdate est non null
+  //   if (textUpdate) {
+  //     //setAttachmentUpdate(post.attachment);
+  //     console.log("post1", post);
+  //     //console.log("updateItem", attachmentUpdate);
 
-      return axios({
-        method: "put",
-        url: `${process.env.REACT_APP_API_URL}api/post/${post.id}`,
-        data: { file: post.attachment, content: textUpdate },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((res) => {
-          console.log("res.data de updateItem :", res.data);
-          setIsUpdated(false);
-          reloadPosts();
-        })
-        .catch((err) => console.log(err));
-    }
-    console.log("post.attachment", post.attachment);
-    setIsUpdated(false);
-  };
+  //     return axios({
+  //       method: "put",
+  //       url: `${process.env.REACT_APP_API_URL}api/post/${post.id}`,
+  //       data: { file: post.attachment, content: textUpdate },
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     })
+  //       .then((res) => {
+  //         console.log("res.data de updateItem :", res.data);
+  //         setIsUpdated(false);
+  //         getPosts();
+  //       })
+  //       .catch((err) => console.log(err));
+  //   }
+  //   console.log("post.attachment", post.attachment);
+  //   setIsUpdated(false);
+  // };
 
   // Execution de la récuperation des données utilisateurs uniquement au premier chargement de la fonction Card
   useEffect(() => {
@@ -51,9 +53,24 @@ const Card = ({ post, reloadPosts }) => {
         })
         .catch((err) => console.log(err));
     };
-
     getUsersData();
-  }, []);
+
+    const getComments = () => {
+      const token = localStorage.getItem("token");
+
+      axios
+        .get(`${process.env.REACT_APP_API_URL}api/comment/` + post.id, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          setComments(res.data);
+        })
+        .catch((err) => console.log(err));
+    };
+    getComments();
+  }, [post.id]);
 
   // Execution de la récuperation des données d'un utilisateur dès que l'userId change
   useEffect(() => {
@@ -148,11 +165,7 @@ const Card = ({ post, reloadPosts }) => {
             {/* Implémentation des droits admin ou user pour la suppression d'un post*/}
             {userData.is_admin ? (
               <div className="button-container">
-                <DeleteCard
-                  post={post}
-                  reloadPosts={reloadPosts}
-                  id={post.user_id}
-                />
+                <DeleteCard post={post} getPosts={getPosts} />
               </div>
             ) : (
               userData.id === post.user_id && (
@@ -160,18 +173,22 @@ const Card = ({ post, reloadPosts }) => {
                   {/* <div onClick={() => setIsUpdated(!isUpdated)}>
                     <img src="./img/edit.svg" alt="edit" />
                   </div> */}
-                  <DeleteCard
-                    post={post}
-                    reloadPosts={reloadPosts}
-                    id={post.user_id}
-                  />
+                  <DeleteCard post={post} getPosts={getPosts} />
                 </div>
               )
             )}
             <div className="card-footer">
+              <div className="comment-icon">
+                <img
+                  onClick={() => setShowComments(!showComments)}
+                  src="./img/comment.jpg"
+                  alt="comment"
+                />
+                <span>{comments.length}</span>
+              </div>
               <LikeButton post={post} />
             </div>
-            <CardComments postId={post.id} />
+            {showComments && <CardComments postId={post.id} />}
           </div>
         </>
       )}
