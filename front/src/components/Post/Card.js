@@ -14,7 +14,8 @@ const Card = ({ getPosts, post }) => {
   const [usersData, setUsersData] = useState([]);
   const [userData, setUserData] = useState([]);
   const userId = localStorage.getItem("userId");
-  // const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
+
   //const [attachmentUpdate, setAttachmentUpdate] = useState();
 
   // const updateItem = () => {
@@ -44,20 +45,35 @@ const Card = ({ getPosts, post }) => {
   // };
 
   // Execution de la récuperation des données utilisateurs uniquement au premier chargement de la fonction Card
+
   useEffect(() => {
     const getUsersData = () => {
       axios
-        .get(`${process.env.REACT_APP_API_URL}api/user/`)
+        .get(`${process.env.REACT_APP_API_URL}api/user/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then((res) => {
           setUsersData(res.data);
         })
         .catch((err) => console.log(err));
     };
-    getUsersData();
+
+    const getUserData = () => {
+      axios
+        .get(`${process.env.REACT_APP_API_URL}api/user/` + userId, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          setUserData(res.data);
+        })
+        .catch((err) => console.log(err));
+    };
 
     const getComments = () => {
-      const token = localStorage.getItem("token");
-
       axios
         .get(`${process.env.REACT_APP_API_URL}api/comment/` + post.id, {
           headers: {
@@ -69,22 +85,11 @@ const Card = ({ getPosts, post }) => {
         })
         .catch((err) => console.log(err));
     };
-    getComments();
-  }, [post.id]);
 
-  // Execution de la récuperation des données d'un utilisateur dès que l'userId change
-  useEffect(() => {
-    const getUserData = () => {
-      axios
-        .get(`${process.env.REACT_APP_API_URL}api/user/` + userId)
-        .then((res) => {
-          setUserData(res.data);
-        })
-        .catch((err) => console.log(err));
-    };
-
+    getUsersData();
     getUserData();
-  }, [userId]);
+    getComments();
+  }, [post.id, userId, token]);
 
   // On desactive le loader dès que les données utilisateurs sont chargées
   useEffect(() => {

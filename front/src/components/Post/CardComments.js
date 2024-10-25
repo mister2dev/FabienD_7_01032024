@@ -9,28 +9,35 @@ const CardComments = ({ postId }) => {
   const [usersData, setUsersData] = useState([]);
   const [userData, setUserData] = useState([]);
   const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
 
   const getUsersData = useCallback(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}api/user/`)
+      .get(`${process.env.REACT_APP_API_URL}api/user/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         setUsersData(res.data);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [token]);
 
   const getUserData = useCallback(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}api/user/` + userId)
+      .get(`${process.env.REACT_APP_API_URL}api/user/` + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         setUserData(res.data);
       })
       .catch((err) => console.log(err));
-  }, [userId]);
+  }, [userId, token]);
 
   const getComments = useCallback(() => {
-    const token = localStorage.getItem("token");
-
     axios
       .get(`${process.env.REACT_APP_API_URL}api/comment/` + postId, {
         headers: {
@@ -42,7 +49,7 @@ const CardComments = ({ postId }) => {
         setComments(res.data);
       })
       .catch((err) => console.log(err));
-  }, [postId]);
+  }, [postId, token]);
 
   useEffect(() => {
     getUsersData();
@@ -51,8 +58,6 @@ const CardComments = ({ postId }) => {
   }, [getUsersData, getUserData, getComments]);
 
   const handleComment = (e) => {
-    const token = localStorage.getItem("token");
-
     e.preventDefault();
     if (text) {
       axios({
@@ -108,8 +113,7 @@ const CardComments = ({ postId }) => {
             <p>{comment.content}</p>
             <DeleteComment
               comment={comment}
-              postId={postId}
-              reloadComments={getComments}
+              getComments={getComments}
               userData={userData}
             />
           </div>

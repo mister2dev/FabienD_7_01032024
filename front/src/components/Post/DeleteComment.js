@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const DeleteComment = ({ comment, reloadComments, userData }) => {
+const DeleteComment = ({ comment, getComments, userData }) => {
   const [isAuthor, setIsAuthor] = useState(false);
   const userId = localStorage.getItem("userId");
 
@@ -16,8 +16,8 @@ const DeleteComment = ({ comment, reloadComments, userData }) => {
       },
     })
       .then((res) => {
-        console.log("Comment deleted:", res.data);
-        reloadComments();
+        console.log("Commentaire effacé:", res.data);
+        getComments();
       })
       .catch((err) => console.log(err));
   };
