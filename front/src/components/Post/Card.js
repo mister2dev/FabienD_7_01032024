@@ -46,6 +46,19 @@ const Card = ({ getPosts, post }) => {
 
   // Execution de la récuperation des données utilisateurs uniquement au premier chargement de la fonction Card
 
+  const getComments = () => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}api/comment/` + post.id, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setComments(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
     const getUsersData = () => {
       axios
@@ -69,19 +82,6 @@ const Card = ({ getPosts, post }) => {
         })
         .then((res) => {
           setUserData(res.data);
-        })
-        .catch((err) => console.log(err));
-    };
-
-    const getComments = () => {
-      axios
-        .get(`${process.env.REACT_APP_API_URL}api/comment/` + post.id, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => {
-          setComments(res.data);
         })
         .catch((err) => console.log(err));
     };
@@ -193,7 +193,9 @@ const Card = ({ getPosts, post }) => {
               </div>
               <LikeButton post={post} />
             </div>
-            {showComments && <CardComments postId={post.id} />}
+            {showComments && (
+              <CardComments postId={post.id} getComments={getComments} />
+            )}
           </div>
         </>
       )}

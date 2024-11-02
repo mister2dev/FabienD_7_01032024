@@ -45,7 +45,12 @@ const UploadImg = ({ setPreview }) => {
       } else {
         // Mettez à jour le stockage local ou l'état avec le nouveau chemin de l'image
         localStorage.setItem("userPic", response.data.file);
-        window.location.reload();
+
+        // Condition remplie : déclenchez un événement personnalisé
+        const event = new CustomEvent("userPicUpdated");
+        window.dispatchEvent(event);
+
+        // window.location.reload();
         setError("");
       }
     } catch (error) {

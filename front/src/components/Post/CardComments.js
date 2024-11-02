@@ -3,7 +3,7 @@ import axios from "axios";
 import { commentDateParser, isEmpty } from "../Utils";
 import DeleteComment from "./DeleteComment";
 
-const CardComments = ({ postId }) => {
+const CardComments = ({ postId, getComments }) => {
   const [comments, setComments] = useState([]);
   const [text, setText] = useState("");
   const [usersData, setUsersData] = useState([]);
@@ -37,7 +37,7 @@ const CardComments = ({ postId }) => {
       .catch((err) => console.log(err));
   }, [userId, token]);
 
-  const getComments = useCallback(() => {
+  const fetchComments = useCallback(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}api/comment/` + postId, {
         headers: {
@@ -54,8 +54,8 @@ const CardComments = ({ postId }) => {
   useEffect(() => {
     getUsersData();
     getUserData();
-    getComments();
-  }, [getUsersData, getUserData, getComments]);
+    fetchComments();
+  }, [getUsersData, getUserData, fetchComments]);
 
   const handleComment = (e) => {
     e.preventDefault();
@@ -72,9 +72,10 @@ const CardComments = ({ postId }) => {
           Authorization: `Bearer ${token}`,
         },
       })
-        .then((res) => {
+        .then(() => {
           setText(""); // On efface le champ input
           getComments(); // On raffraichit la liste des données
+          fetchComments();
         })
         .catch((err) => console.log(err));
     }
@@ -114,6 +115,7 @@ const CardComments = ({ postId }) => {
             <DeleteComment
               comment={comment}
               getComments={getComments}
+              fetchComments={fetchComments}
               userData={userData}
             />
           </div>

@@ -1,9 +1,25 @@
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import Logout from "./Log/Logout";
 
 const Navbar = () => {
   const user = localStorage.getItem("user");
-  const userPic = localStorage.getItem("userPic");
+  const [userPic, setUserPic] = useState(localStorage.getItem("userPic"));
+
+  useEffect(() => {
+    // Fonction de gestion de l'événement pour recharger userPic
+    const handleUserPicUpdate = () => {
+      setUserPic(localStorage.getItem("userPic"));
+    };
+
+    // Ajouter un écouteur pour le CustomEvent "userPicUpdated"
+    window.addEventListener("userPicUpdated", handleUserPicUpdate);
+
+    // Nettoyage de l'écouteur
+    return () => {
+      window.removeEventListener("userPicUpdated", handleUserPicUpdate);
+    };
+  }, []);
 
   return (
     <nav>
