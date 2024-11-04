@@ -122,16 +122,13 @@
         }
 
         input {
-          width: 25px;
-          height: 25px;
-          position: absolute;
-          transform: translate(26px, 0px);
+          width: 35px;
+          height: 35px;
           opacity: 0;
           cursor: pointer;
-
-          &::-webkit-file-upload-button {
-            cursor: pointer;
-          }
+          position: absolute;
+          bottom: 4px;
+          left: 4px;
         }
       }
       p {

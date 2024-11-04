@@ -6,6 +6,9 @@
     border-radius: 6px;
     margin: 8px auto;
   
+    @media screen and (max-width: 425px) {
+      grid-template-columns: 1fr;
+    }
   
     .fa-spinner {
       position: sticky;
@@ -54,6 +57,7 @@
         box-shadow: 0 0 3px rgba(51, 51, 51, 0.342);
       }
       iframe {
+        margin-top: 12px;
         width: 100%;
         min-height: 330px;
         border-radius: 6px;
@@ -64,6 +68,12 @@
         display: flex;
         justify-content: center;
         align-items: center;
+
+        @media screen and (max-width: 425px) {
+        display: block;
+      }
+    
+
         .button-valide {
           letter-spacing: 2px;
           width: 130px;
@@ -94,7 +104,6 @@
           img {
             height: 16px;
             width: 16px;
-            // transform: translateY(3px);
           }
         }
       }
@@ -124,6 +133,7 @@
         padding: 15px;
         margin: 5px 0;
         border-radius: 6px;
+        
   
         img {
           height: 40px;
@@ -135,6 +145,15 @@
           display: flex;
           justify-content: center;
           align-items: center;
+
+          @media screen and (max-width: 425px) {
+            grid-template-columns: 1fr;
+            display: block;
+            textarea {
+              width: 240px;
+            }
+          }
+
           .button-valide {
             letter-spacing: 2px;
             width: 130px;
@@ -227,9 +246,6 @@
   .footer-form .icon input {
     height: 16px;
     width: 16px;
-    position: relative;
-    top: 7px;
-    right: 16px;
     opacity: 0;
     cursor: pointer;
   }
