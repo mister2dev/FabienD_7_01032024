@@ -7,7 +7,7 @@ const Navbar = () => {
   const [userPic, setUserPic] = useState(localStorage.getItem("userPic"));
 
   useEffect(() => {
-    // Fonction de gestion de l'événement pour recharger userPic
+    // Fonction de gestion de l'événement pour recharger userPic si i ly a changement de photo de profil
     const handleUserPicUpdate = () => {
       setUserPic(localStorage.getItem("userPic"));
     };

@@ -3,13 +3,18 @@ import axios from "axios";
 import { commentDateParser, isEmpty } from "../Utils";
 import DeleteComment from "./DeleteComment";
 
-const CardComments = ({ postId, getComments }) => {
+const CardComments = ({ postId, getComments, comment }) => {
   const [comments, setComments] = useState([]);
   const [text, setText] = useState("");
   const [usersData, setUsersData] = useState([]);
   const [userData, setUserData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
+  // const [editingCommentId, setEditingCommentId] = useState(null); // ID du commentaire en cours d'édition
+  // const [textUpdate, setTextUpdate] = useState(""); // Texte pour la mise à jour
+  const [isUpdated, setIsUpdated] = useState(false);
+  const [textUpdate, setTextUpdate] = useState(null);
 
   const getUsersData = useCallback(() => {
     axios
@@ -38,6 +43,7 @@ const CardComments = ({ postId, getComments }) => {
   }, [userId, token]);
 
   const fetchComments = useCallback(() => {
+    setLoading(true); // Début du chargement des commentaires
     axios
       .get(`${process.env.REACT_APP_API_URL}api/comment/` + postId, {
         headers: {
@@ -45,10 +51,13 @@ const CardComments = ({ postId, getComments }) => {
         },
       })
       .then((res) => {
-        console.log("res.data de getComments", res.data);
         setComments(res.data);
+        setLoading(false); // Fin du chargement
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
   }, [postId, token]);
 
   useEffect(() => {
@@ -75,6 +84,27 @@ const CardComments = ({ postId, getComments }) => {
         .then(() => {
           setText(""); // On efface le champ input
           getComments(); // On raffraichit la liste des données
+          fetchComments();
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  const updateComment = (commentID) => {
+    if (textUpdate) {
+      return axios({
+        method: "put",
+        url: `${process.env.REACT_APP_API_URL}api/comment/${commentID}`,
+        data: {
+          content: textUpdate,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then(() => {
+          setIsUpdated(false);
+          setTextUpdate("");
           fetchComments();
         })
         .catch((err) => console.log(err));
@@ -111,30 +141,66 @@ const CardComments = ({ postId, getComments }) => {
               </div>
               <span>{commentDateParser(comment.createdAt)}</span>
             </div>
-            <p>{comment.content}</p>
-            <DeleteComment
-              comment={comment}
-              getComments={getComments}
-              fetchComments={fetchComments}
-              userData={userData}
-            />
+            {isUpdated === false && <p>{comment.content}</p>}
+            {isUpdated && (
+              <div className="update-comment">
+                <textarea
+                  defaultValue={comment.content}
+                  onChange={(e) => setTextUpdate(e.target.value)}
+                />
+                <div className="button-valide">
+                  <button
+                    className="btn"
+                    onClick={() => updateComment(comment.id)}
+                  >
+                    Valider
+                  </button>
+                </div>
+              </div>
+            )}{" "}
+            {userData.id === comment.user_id ? (
+              <div className="button-container">
+                <div onClick={() => setIsUpdated(!isUpdated)}>
+                  <img src="./img/edit.svg" alt="edit" />
+                </div>
+                <DeleteComment
+                  comment={comment}
+                  getComments={getComments}
+                  fetchComments={fetchComments}
+                  userData={userData}
+                />
+              </div>
+            ) : (
+              userData.is_admin && (
+                <div className="button-container">
+                  <DeleteComment
+                    comment={comment}
+                    getComments={getComments}
+                    fetchComments={fetchComments}
+                    userData={userData}
+                  />
+                </div>
+              )
+            )}
           </div>
         </div>
       ))}
-      {userId && (
-        <form action="" onSubmit={handleComment} className="comment-form">
-          <input
-            type="text"
-            name="text"
-            onChange={(e) => setText(e.target.value)}
-            value={text}
-            placeholder="Laisser un commentaire"
-          />
-          <br />
-          <input type="submit" value="Envoyer" />
-        </form>
-      )}
+      {!loading &&
+        userId && ( // Rendu du formulaire uniquement après le chargement
+          <form action="" onSubmit={handleComment} className="comment-form">
+            <input
+              type="text"
+              name="text"
+              onChange={(e) => setText(e.target.value)}
+              value={text}
+              placeholder="Laisser un commentaire"
+            />
+            <br />
+            <input type="submit" value="Envoyer" />
+          </form>
+        )}
     </div>
   );
 };
+
 export default CardComments;

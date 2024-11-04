@@ -47,27 +47,6 @@
         font-size: 1.1rem;
   
       }
-      // .update-post {
-      //   textarea {
-      //     font-size: 1.3rem;
-      //     border: 1px solid $color-2;
-      //     padding: 10px;
-      //     border-radius: 20px 20px 6px 20px;
-      //   }
-      //   .button-container {
-      //     .btn {
-      //       background: $color-2;
-      //       width: 240px;
-      //       transform: translateY(-3px);
-  
-      //       &:hover {
-      //         background: $color-1;
-      //         width: 250px;
-      //         letter-spacing: 1px;
-      //       }
-      //     }
-      //   }
-      // }
       .card-pic {
         width: 100%;
         border-radius: 6px;
@@ -79,6 +58,22 @@
         min-height: 330px;
         border-radius: 6px;
         box-shadow: 0 0 3px rgba(51, 51, 51, 0.342);
+      }
+
+      .update-post {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .button-valide {
+          letter-spacing: 2px;
+          width: 130px;
+          button {
+            border-radius: 6px;
+            margin-left: 10px;
+            letter-spacing: 2px;
+            width: 130px;
+          }
+        }
       }
       .button-container {
         justify-content: flex-end;
@@ -99,7 +94,7 @@
           img {
             height: 16px;
             width: 16px;
-            transform: translateY(3px);
+            // transform: translateY(3px);
           }
         }
       }
@@ -135,7 +130,24 @@
           width: 40px;
           border-radius: 14px;
           box-shadow: 1px 1px 3px rgba(51, 51, 51, 0.192);
-  
+        }
+        .update-comment {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          .button-valide {
+            letter-spacing: 2px;
+            width: 130px;
+            button {
+              border-radius: 6px;
+              margin-left: 10px;
+              letter-spacing: 2px;
+              width: 130px;
+            }
+          }
+        }
+        .button-container img{
+          border-radius: 5px;
         }
         .comment-header {
           display: flex;
@@ -168,80 +180,6 @@
         }
         p {
           margin-top: 8px;
-        }
-        .edit-comment {
-          color: $color-2;
-          img {
-            float: right;
-            margin-left: 10px;
-            cursor: pointer;
-            transition: 0.15s;
-            box-shadow: none;
-            height: 16px;
-            width: 12px;
-  
-            &:hover {
-              transform: scale(1.1);
-            }
-          }
-  
-          // .edit-comment-form {
-          //   margin-top: 14px;
-          //   label {
-          //     background: $white;
-          //     color: $color-1;
-          //     padding: 6px 12px 5px;
-          //     border-radius: 20px 20px 20px 6px;
-          //     cursor: pointer;
-          //     transition: 0.2s;
-          //     display: inline-block;
-          //     font-family: Arial, Helvetica, sans-serif;
-  
-          //     &:hover {
-          //       transform: scale(1.05);
-          //     }
-          //   }
-          //   input[type="text"] {
-          //     margin: 4px 0;
-          //     background: $white;
-          //     font-size: 1.15rem;
-          //     padding: 16px;
-          //     width: 100%;
-          //     border-radius: 6px 20px 6px 20px;
-          //   }
-          //   .btn {
-          //     display: flex;
-          //     align-items: center;
-          //     float: right;
-  
-          //     span {
-          //       background: $white;
-          //       padding: 10px 5px;
-          //       border-radius: 50px;
-          //       margin-right: 6px;
-          //       transition: 0.2s;
-          //       cursor: pointer;
-  
-          //       &:hover {
-          //         background: $color-2;
-          //       }
-  
-          //       img {
-          //         transform: translate(-5px, 0);
-          //       }
-          //     }
-          //     input[type="submit"] {
-          //       background: $color-2;
-          //       width: inherit;
-          //       transition: 0.2s;
-  
-          //       &:hover {
-          //         width: inherit;
-          //         background: $color-1;
-          //       }
-          //     }
-          //   }
-          // }
         }
       }
       .comment-form {
@@ -284,25 +222,6 @@
         }
       }
     }
-    // .update-post {
-    //   textarea {
-    //     width: 100% !important;
-    //     height: 80px;
-    //   }
-    //   .button-container {
-    //     text-align: right;
-  
-    //     button {
-    //       margin: 0;
-    //       margin-left: 5px;
-    //       width: 150px;
-  
-    //       &:nth-child(1) {
-    //         background: $color-1;
-    //       }
-    //     }
-    //   }
-    // }
   }
 
   .footer-form .icon input {

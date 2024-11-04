@@ -39,6 +39,7 @@ exports.getOneComment = (req, res) => {
 
 exports.updateComment = (req, res, next) => {
   const comment_id = req.params.id;
+  const content = req.body.content;
   const sql = `UPDATE comments SET content = "${content}" WHERE id = ${comment_id};`;
 
   db.query(sql, (err, result) => {

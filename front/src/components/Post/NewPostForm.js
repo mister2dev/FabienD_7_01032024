@@ -22,8 +22,8 @@ const NewPostForm = ({ getPosts }) => {
       let findLink = message.split(" ");
       for (let i = 0; i < findLink.length; i++) {
         if (
-          findLink[i].includes("https://www.yout") ||
-          findLink[i].includes("https://yout")
+          findLink[i].includes("https://www.youtube") ||
+          findLink[i].includes("https://youtube")
         ) {
           let embed = findLink[i].replace("watch?v=", "embed/");
           setVideo(embed.split("&")[0]);

@@ -35,17 +35,16 @@ const DeleteComment = ({ comment, getComments, fetchComments, userData }) => {
   return (
     <div className="edit-comment">
       {(userData.is_admin || isAuthor) && (
-        <div className="button-container">
-          <span
-            onClick={() => {
-              if (window.confirm("Voulez-vous supprimer ce commentaire ?")) {
-                handleDelete();
-              }
-            }}
-          >
-            <img src="./img/trash.svg" alt="delete" />
-          </span>
-        </div>
+        <span
+          className="button-container"
+          onClick={() => {
+            if (window.confirm("Voulez-vous supprimer ce commentaire ?")) {
+              handleDelete();
+            }
+          }}
+        >
+          <img src="./img/trash.svg" alt="delete" />
+        </span>
       )}
     </div>
   );

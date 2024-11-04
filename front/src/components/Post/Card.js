@@ -8,7 +8,7 @@ import CardComments from "./CardComments";
 const Card = ({ getPosts, post }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdated, setIsUpdated] = useState(false);
-  // const [textUpdate, setTextUpdate] = useState(null);
+  const [textUpdate, setTextUpdate] = useState(null);
   const [comments, setComments] = useState([]);
   const [showComments, setShowComments] = useState(false);
   const [usersData, setUsersData] = useState([]);
@@ -16,33 +16,29 @@ const Card = ({ getPosts, post }) => {
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
 
-  //const [attachmentUpdate, setAttachmentUpdate] = useState();
+  const updateItem = () => {
+    // Envoi de la mise à jour du texte si l'état textUpdate est non null
+    if (textUpdate) {
+      console.log("post1", post);
 
-  // const updateItem = () => {
-  //   // Envoi de la mise à jour du texte si l'état textUpdate est non null
-  //   if (textUpdate) {
-  //     //setAttachmentUpdate(post.attachment);
-  //     console.log("post1", post);
-  //     //console.log("updateItem", attachmentUpdate);
-
-  //     return axios({
-  //       method: "put",
-  //       url: `${process.env.REACT_APP_API_URL}api/post/${post.id}`,
-  //       data: { file: post.attachment, content: textUpdate },
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     })
-  //       .then((res) => {
-  //         console.log("res.data de updateItem :", res.data);
-  //         setIsUpdated(false);
-  //         getPosts();
-  //       })
-  //       .catch((err) => console.log(err));
-  //   }
-  //   console.log("post.attachment", post.attachment);
-  //   setIsUpdated(false);
-  // };
+      return axios({
+        method: "put",
+        url: `${process.env.REACT_APP_API_URL}api/post/${post.id}`,
+        data: { file: post.attachment, content: textUpdate },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => {
+          console.log("res.data de updateItem :", res.data);
+          setIsUpdated(false);
+          getPosts();
+        })
+        .catch((err) => console.log(err));
+    }
+    console.log("post.attachment", post.attachment);
+    setIsUpdated(false);
+  };
 
   // Execution de la récuperation des données utilisateurs uniquement au premier chargement de la fonction Card
 
@@ -140,19 +136,19 @@ const Card = ({ getPosts, post }) => {
               <span>{dateParser(post.createdAt)}</span>
             </div>
             {isUpdated === false && <p>{post.content}</p>}
-            {/* {isUpdated && (
+            {isUpdated && (
               <div className="update-post">
                 <textarea
                   defaultValue={post.content}
                   onChange={(e) => setTextUpdate(e.target.value)}
                 />
-                <div className="button-container">
+                <div className="button-valide">
                   <button className="btn" onClick={updateItem}>
-                    Valider modification
+                    Valider
                   </button>
                 </div>
               </div>
-            )}{" "} */}
+            )}{" "}
             {post.attachment && (
               <img src={post.attachment} alt="card-pic" className="card-pic" />
             )}
@@ -168,16 +164,16 @@ const Card = ({ getPosts, post }) => {
               ></iframe>
             )}
             {/* Implémentation des droits admin ou user pour la suppression d'un post*/}
-            {userData.is_admin ? (
+            {userData.id === post.user_id ? (
               <div className="button-container">
+                <div onClick={() => setIsUpdated(!isUpdated)}>
+                  <img src="./img/edit.svg" alt="edit" />
+                </div>
                 <DeleteCard post={post} getPosts={getPosts} />
               </div>
             ) : (
-              userData.id === post.user_id && (
+              userData.is_admin && (
                 <div className="button-container">
-                  {/* <div onClick={() => setIsUpdated(!isUpdated)}>
-                    <img src="./img/edit.svg" alt="edit" />
-                  </div> */}
                   <DeleteCard post={post} getPosts={getPosts} />
                 </div>
               )
