@@ -1,6 +1,4 @@
-const db_config = require("../config/db");
 const db = require("../config/db");
-// const db = db_config.getDB();
 const fs = require("fs");
 const path = require("path");
 

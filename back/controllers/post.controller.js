@@ -1,5 +1,3 @@
-const db_config = require("../config/db");
-// const db = db_config.getDB();
 const db = require("../config/db");
 
 exports.createPost = (req, res, next) => {
@@ -11,7 +9,7 @@ exports.createPost = (req, res, next) => {
   }
   const post = [user_id, content, file, video];
   const sql =
-    "INSERT INTO posts (user_id, content, attachment, video) VALUES ($1, $2, $3, $4?)";
+    "INSERT INTO posts (user_id, content, attachment, video) VALUES ($1, $2, $3, $4)";
 
   db.query(sql, post, (error, result) => {
     if (error) {

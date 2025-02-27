@@ -1,10 +1,7 @@
-const dbc = require("../config/db");
-// const db = dbc.getDB();
 const db = require("../config/db");
 
-exports.createComment = (req, res, next) => {
-  const { id, user_id, post_id, content } = req.body;
-  // const sql = `INSERT INTO comments (id, user_id, post_id, content) VALUES (NULL, ${user_id}, ${post_id}, "${content}")`;
+exports.createComment = (req, res) => {
+  const { user_id, post_id, content } = req.body;
   const sql = `
   INSERT INTO comments (user_id, post_id, content) 
   VALUES ($1, $2, $3) 
@@ -32,9 +29,9 @@ exports.getAllComments = (req, res) => {
 };
 
 exports.getOneComment = (req, res) => {
-  const comment_Id = req.params.id;
-  const sql = `SELECT * FROM comments WHERE comments.post_id = ${comment_Id}`;
-  db.query(sql, (err, result) => {
+  const comment_id = req.params.id;
+  const sql = `SELECT * FROM comments WHERE comments.post_id = $1`;
+  db.query(sql, [comment_id], (err, result) => {
     if (err) {
       res.status(404).json({ err });
       throw err;
@@ -46,9 +43,10 @@ exports.getOneComment = (req, res) => {
 exports.updateComment = (req, res, next) => {
   const comment_id = req.params.id;
   const content = req.body.content;
-  const sql = `UPDATE comments SET content = "${content}" WHERE id = ${comment_id};`;
+  console.log("comment_id", content);
+  const sql = `UPDATE comments SET content = $1 WHERE id = $2;`;
 
-  db.query(sql, (err, result) => {
+  db.query(sql, [content, comment_id], (err, result) => {
     if (err) {
       res.status(404).json({ err });
       throw err;
@@ -61,8 +59,8 @@ exports.updateComment = (req, res, next) => {
 
 exports.deleteOneComment = (req, res) => {
   const comment_id = req.params.id;
-  const sql = `DELETE FROM comments WHERE comments.id = ${comment_id}`;
-  db.query(sql, (err, result) => {
+  const sql = `DELETE FROM comments WHERE comments.id = $1`;
+  db.query(sql, [comment_id], (err, result) => {
     if (err) {
       res.status(404).json({ err });
       throw err;

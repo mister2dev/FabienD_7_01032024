@@ -20,7 +20,7 @@ const LikeButton = ({ post }) => {
             },
           }
         );
-        setLikeCount(response.data.LikesNumber);
+        setLikeCount(Number(response.data.LikesNumber));
         console.log("response.data.LikesNumber", response);
 
         // On Vérifie si l'utilisateur actuel a déjà liké ce post
