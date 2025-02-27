@@ -25,14 +25,13 @@ const SignUpForm = () => {
 
       console.log("Réponse :", response);
       console.log("response.data:", response.data);
-      console.log("rep:", response.data.error);
 
-      if (response.data.error) {
-        setError(response.data.error); // Stocker le message d'erreur dans l'état
+      if (response.data.message) {
+        setError(response.data.message); // Stocker le message d'erreur dans l'état
       }
 
       //SetFormSubmit permet de vérifier que l'inscription est validée et ensuite de baculer sur connexion
-      if (response.data.error && response.data.error.includes("créé")) {
+      if (response.data.message && response.data.message.includes("créé")) {
         setFormSubmit(true);
         setError("");
       }

@@ -133,7 +133,7 @@ const Card = ({ getPosts, post }) => {
                 </h3>
               </div>
               {/* Affichage et formatage de la date */}
-              <span>{dateParser(post.createdAt)}</span>
+              <span>{dateParser(post.created_at)}</span>
             </div>
             {isUpdated === false && <p>{post.content}</p>}
             {isUpdated && (

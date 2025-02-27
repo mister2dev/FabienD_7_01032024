@@ -1,10 +1,16 @@
 const dbc = require("../config/db");
-const db = dbc.getDB();
+// const db = dbc.getDB();
+const db = require("../config/db");
 
 exports.createComment = (req, res, next) => {
   const { id, user_id, post_id, content } = req.body;
-  const sql = `INSERT INTO comments (id, user_id, post_id, content) VALUES (NULL, ${user_id}, ${post_id}, "${content}")`;
-  db.query(sql, (err, result) => {
+  // const sql = `INSERT INTO comments (id, user_id, post_id, content) VALUES (NULL, ${user_id}, ${post_id}, "${content}")`;
+  const sql = `
+  INSERT INTO comments (user_id, post_id, content) 
+  VALUES ($1, $2, $3) 
+  RETURNING *;
+`;
+  db.query(sql, [user_id, post_id, content], (err, result) => {
     if (err) {
       res.status(404).json({ err });
       console.log(err);
@@ -21,7 +27,7 @@ exports.getAllComments = (req, res) => {
       res.status(404).json({ err });
       throw err;
     }
-    res.status(200).json(result);
+    res.status(200).json(result.rows);
   });
 };
 
@@ -33,7 +39,7 @@ exports.getOneComment = (req, res) => {
       res.status(404).json({ err });
       throw err;
     }
-    res.status(200).json(result);
+    res.status(200).json(result.rows);
   });
 };
 

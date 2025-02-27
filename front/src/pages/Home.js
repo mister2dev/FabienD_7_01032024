@@ -20,6 +20,7 @@ const Home = () => {
       })
       .then((res) => {
         // tableau des posts 0 à num
+        console.log("res.data", res.data);
         const array = res.data.slice(0, num);
         // Enregistrement du array dans l'état
         setPosts(array);

@@ -1,5 +1,6 @@
 const db_config = require("../config/db");
-const db = db_config.getDB();
+// const db = db_config.getDB();
+const db = require("../config/db");
 
 exports.createPost = (req, res, next) => {
   const { user_id, content, video } = req.body;
@@ -10,7 +11,7 @@ exports.createPost = (req, res, next) => {
   }
   const post = [user_id, content, file, video];
   const sql =
-    "INSERT INTO posts (user_id, content, attachment, video) VALUES (?, ?, ?,?)";
+    "INSERT INTO posts (user_id, content, attachment, video) VALUES ($1, $2, $3, $4?)";
 
   db.query(sql, post, (error, result) => {
     if (error) {
@@ -23,14 +24,14 @@ exports.createPost = (req, res, next) => {
 };
 
 exports.getAllPosts = (req, res, next) => {
-  const sql = "SELECT * FROM posts ORDER BY createdAt DESC";
+  const sql = "SELECT * FROM posts ORDER BY created_at DESC";
 
   db.query(sql, (err, result) => {
     if (err) {
       res.status(404).json({ err });
       throw err;
     }
-    res.status(200).json(result);
+    res.status(200).json(result.rows);
   });
 };
 
@@ -42,7 +43,7 @@ exports.getOnePost = (req, res, next) => {
       res.status(404).json({ err });
       throw err;
     }
-    res.status(200).json(result);
+    res.status(200).json(result.rows);
   });
 };
 
@@ -64,7 +65,7 @@ exports.updatePost = (req, res, next) => {
   //   file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
   // }
   console.log("file", file);
-  const sql = "UPDATE posts SET content = ?, attachment = ? WHERE id = ?";
+  const sql = "UPDATE posts SET content = $1, attachment = $2 WHERE id = $3";
 
   db.query(sql, [content, file, postId], (err, result) => {
     if (err) {

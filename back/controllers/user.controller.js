@@ -1,19 +1,20 @@
 const db_config = require("../config/db");
-const db = db_config.getDB();
+const db = require("../config/db");
+// const db = db_config.getDB();
 const fs = require("fs");
 const path = require("path");
 
 exports.getOneUser = (req, res, next) => {
   const userId = req.params.id;
-  const sql = `SELECT id, username, email, is_admin FROM users WHERE id = ?`;
+  const sql = `SELECT id, username, email, is_admin FROM users WHERE id = $1`;
 
-  db.query(sql, userId, (err, result) => {
+  db.query(sql, [userId], (err, result) => {
     console.log("resultat :", result);
     if (err) {
       res.status(404).json({ err });
       throw err;
     }
-    res.status(200).json(result[0]);
+    res.status(200).json(result.rows[0]);
   });
 };
 
@@ -26,7 +27,7 @@ exports.getAllUsers = (req, res, next) => {
       res.status(404).json({ err });
       throw err;
     }
-    res.status(200).json(result);
+    res.status(200).json(result.rows);
   });
 };
 
@@ -40,21 +41,25 @@ exports.updateUser = (req, res, next) => {
 
   let sqlUpdateUser = "UPDATE users SET ";
   const params = [];
+  let paramIndex = 1; // L'index de paramètre commence à 1 en PostgreSQL
 
   if (username) {
-    sqlUpdateUser += "username = ?, ";
+    sqlUpdateUser += `username = $${paramIndex}, `;
     params.push(username);
+    paramIndex++;
   }
   if (email) {
-    sqlUpdateUser += "email = ?, ";
+    sqlUpdateUser += `email = $${paramIndex}, `;
     params.push(email);
+    paramIndex++;
   }
   if (description) {
-    sqlUpdateUser += "description = ?, ";
+    sqlUpdateUser += `description = $${paramIndex}, `;
     params.push(description);
+    paramIndex++;
   }
   sqlUpdateUser = sqlUpdateUser.slice(0, -2); // Suppression de la dernière virgule et espace
-  sqlUpdateUser += " WHERE id = ?";
+  sqlUpdateUser += ` WHERE id = $${paramIndex}`;
   params.push(userId);
 
   db.query(sqlUpdateUser, params, (err, result) => {
@@ -77,7 +82,7 @@ exports.updatePicture = (req, res, next) => {
   }
 
   // Requête SQL pour obtenir le chemin de l'ancienne image
-  const sqlGetOldImage = "SELECT attachment FROM users WHERE id = ?";
+  const sqlGetOldImage = "SELECT attachment FROM users WHERE id = $1";
 
   db.query(sqlGetOldImage, [userId], (err, result) => {
     if (err) {
@@ -99,7 +104,7 @@ exports.updatePicture = (req, res, next) => {
     }
 
     // Mettre à jour l'image de profil dans la base de données
-    const sqlUpdateUser = "UPDATE users SET attachment = ? WHERE id = ?";
+    const sqlUpdateUser = "UPDATE users SET attachment = $1 WHERE id = $2";
 
     db.query(sqlUpdateUser, [file, userId], (err, result) => {
       if (err) {
@@ -112,16 +117,3 @@ exports.updatePicture = (req, res, next) => {
     });
   });
 };
-
-// exports.deleteUser = (req, res) => {
-//   const userId = req.params.id;
-//   const sql = `DELETE FROM users WHERE id = ?`;
-
-//   db.query(sql, userId, (err, result) => {
-//     if (err) {
-//       res.status(400).json(err);
-//       throw err;
-//     }
-//     res.status(200).json({ message: "Votre compte a bien été supprimé !" });
-//   });
-// };
