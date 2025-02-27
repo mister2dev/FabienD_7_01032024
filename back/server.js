@@ -46,3 +46,13 @@ server.on("listening", () => {
 });
 
 server.listen(port);
+
+const pool = require("../back/config/db");
+
+pool.query("SELECT NOW()", (err, res) => {
+  if (err) {
+    console.error("Erreur de connexion à la base de données :", err);
+  } else {
+    console.log("Connexion réussie à la base de données :", res.rows[0]);
+  }
+});
