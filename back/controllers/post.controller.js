@@ -1,11 +1,19 @@
 const db = require("../config/db");
+const cloudinary = require("../services/cloudinaryConfig");
+
+// Fonction utilitaire pour supprimer une image sur Cloudinary
+async function deleteImage(imageUrl) {
+  const publicId = imageUrl.split("/").slice(-2).join("/").split(".")[0];
+  await cloudinary.uploader.destroy(publicId);
+}
 
 exports.createPost = (req, res, next) => {
   const { user_id, content, video } = req.body;
   let file = null;
 
   if (req.file) {
-    file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
+    // file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
+    file = req.file.path;
   }
   const post = [user_id, content, file, video];
   const sql =
@@ -78,13 +86,28 @@ exports.updatePost = (req, res, next) => {
 
 exports.deleteOnePost = (req, res, next) => {
   const post_id = req.params.id;
-  const sql = `DELETE FROM posts WHERE id = ${post_id}`;
+  const selectSql = "SELECT attachment FROM posts WHERE id = $1";
 
-  db.query(sql, (err, result) => {
-    if (err) {
-      res.status(404).json({ err });
-      throw err;
+  db.query(selectSql, [post_id], (err, result) => {
+    const attachmentUrl = result.rows[0].attachment;
+
+    if (attachmentUrl) {
+      deleteImage(attachmentUrl);
+      deletePostFromDb(post_id);
+    } else {
+      deletePostFromDb(post_id);
     }
-    res.status(200).json(result);
   });
+
+  function deletePostFromDb(post_id) {
+    const sql = `DELETE FROM posts WHERE id = ${post_id}`;
+
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(404).json({ err });
+        throw err;
+      }
+      res.status(200).json(result);
+    });
+  }
 };
