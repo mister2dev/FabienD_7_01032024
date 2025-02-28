@@ -139,7 +139,7 @@ const CardComments = ({ postId, getComments, comment }) => {
                     })
                     .join("")}
               </div>
-              <span>{commentDateParser(comment.createdAt)}</span>
+              <span>{commentDateParser(comment.created_at)}</span>
             </div>
             {isUpdated === false && <p>{comment.content}</p>}
             {isUpdated && (
