@@ -33,7 +33,7 @@ const storage = new CloudinaryStorage({
   params: {
     folder: "groupo-social", // Dossier où stocker les images sur Cloudinary
     allowed_formats: ["jpg", "png", "jpeg", "webp"], // Formats autorisés
-    transformation: [{ width: 500, height: 500, crop: "limit" }], // Redimensionnement optionnel
+    transformation: [{ width: 1080, height: 1920, crop: "limit" }], // Redimensionnement optionnel
   },
 });
 
