@@ -1,150 +1,150 @@
 .home {
-    max-width: 700px;
-    margin: 100px auto;
+  max-width: 700px;
+  margin: 100px auto;
 
-    @media screen and (max-width: 700px) {
-      margin: 30px 0;
-    }
-
-  
-    .main {
-      .home-header {
-        margin: 0 auto 12px;
-        
-        .connection-form {
-          background: #fdeeee;
-          border-radius: 20px;
-          padding: 20px;
-  
-          ul {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 18px;
-  
-            li {
-              cursor: pointer;
-              border-radius: 20px;
-              padding: 12px 14px;
-              transition: .2s;
-              margin: 0 8px;
-            }
-            .active-btn {
-              background: $color-1;
-    
-              &:hover {
-                background: $color-2;
-              }
-            }
-            li:not(.active-btn) {
-              &:hover {
-                transform: translateX(3px)
-              }
-            }
-          }
-          form {
-            input {
-              padding: 10px 14px;
-              margin: 0;
-              font-size: 1.2rem;
-              border-radius: 20px;
-    
-              &:focus {
-                box-shadow: 0 0 3px rgba(51, 51, 51, 0.2);
-              }
-            }
-            input[type=submit] {
-              padding: 14px 14px;
-              border-radius: 20px;
-            }
-          }
-        }
-      }
-    }
+  @media screen and (max-width: 700px) {
+    margin: 30px 0;
   }
 
-  .log-container {
-    margin: 0 auto;
-    width: 648px;
-    margin-top: 130px;
+  .main {
+    .home-header {
+      margin: 0 auto 12px;
 
-    @media screen and (max-width: 700px) {
-      width: 350px;
-    }
-  }
+      .connection-form {
+        background: #fdeeee;
+        border-radius: 20px;
+        padding: 20px;
 
-  .connection-form {
-    font-family: 'Roboto';
-    border: 1px solid black;
-    background: $color-4;
-    min-width: 600px;
-    height: 600px;
-    width: 90%;
-    text-align: center;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border-radius: 6px;
-    background-image: url('../../assets/pexels-arthur-brognoli-2260838.jpg');
-    background-size: cover;
-    background-position-y: -350px;
-
-    @media screen and (max-width: 700px) {
-      min-width: 350px;
-      background-position-y: -60px;
-      background-position-x: center;
-    }
-
-    .form-container {
-      height: 60px;
-      border-radius: 0 0 6px 6px;
-      background-color: white;
-      ul {
-        display: flex;
-        justify-content: center;
-        height: 100%;
-        li {
-          text-transform: uppercase;
-          font-size: 13px;
-          border: 1px solid black;
-          margin: 10px 6px 10px 0;
+        ul {
           display: flex;
-          align-items: center;
           justify-content: center;
-          width: 160px;
-          text-align: center;
-          cursor: pointer;
-          border-radius: 4px;
-          padding: 10px 20px;
-          transition: 0.2s;
-        }
-        li:nth-child(2) {
-          color: white;
-          background-color: black;
-        }
-        li:not(.active-btn) {
-          &:hover {
-            transform: scale(1.05);
-          }
-        }
-        #login {
-          position: relative;
-        }
-      }
-      form {
-        input {
-          padding: 14px 20px;
-          margin: 10px;
-          font-size: 1.2rem;
-          border-radius: 20px;
+          margin-bottom: 18px;
 
-          &:focus {
-            box-shadow: 0 0 3px rgba(51, 51, 51, 0.2);
+          li {
+            cursor: pointer;
+            border-radius: 20px;
+            padding: 12px 14px;
+            transition: 0.2s;
+            margin: 0 8px;
+          }
+          .active-btn {
+            background: $color-1;
+
+            &:hover {
+              background: $color-2;
+            }
+          }
+          li:not(.active-btn) {
+            &:hover {
+              transform: translateX(3px);
+            }
           }
         }
-        a {
-          color: rgb(62, 62, 214);
+        form {
+          input {
+            padding: 10px 14px;
+            margin: 0;
+            font-size: 1.2rem;
+            border-radius: 20px;
+
+            &:focus {
+              box-shadow: 0 0 3px rgba(51, 51, 51, 0.2);
+            }
+          }
+          input[type="submit"] {
+            padding: 14px 14px;
+            border-radius: 20px;
+          }
         }
       }
     }
   }
+}
+
+.log-container {
+  margin: 0 auto;
+  width: 648px;
+  margin-top: 130px;
+
+  @media screen and (max-width: 700px) {
+    width: 350px;
+    margin-top: 10px;
+  }
+}
+
+.connection-form {
+  font-family: "Roboto";
+  border: 1px solid black;
+  background: $color-4;
+  min-width: 600px;
+  height: 600px;
+  width: 90%;
+  text-align: center;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 6px;
+  background-image: url("../../assets/pexels-arthur-brognoli-2260838.jpg");
+  background-size: cover;
+  background-position-y: -350px;
+
+  @media screen and (max-width: 700px) {
+    min-width: 350px;
+    background-position-y: -60px;
+    background-position-x: center;
+  }
+
+  .form-container {
+    height: 60px;
+    border-radius: 0 0 6px 6px;
+    background-color: white;
+    ul {
+      display: flex;
+      justify-content: center;
+      height: 100%;
+      li {
+        text-transform: uppercase;
+        font-size: 13px;
+        border: 1px solid black;
+        margin: 10px 6px 10px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 160px;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 4px;
+        padding: 10px 20px;
+        transition: 0.2s;
+      }
+      li:nth-child(2) {
+        color: white;
+        background-color: black;
+      }
+      li:not(.active-btn) {
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+      #login {
+        position: relative;
+      }
+    }
+    form {
+      input {
+        padding: 14px 20px;
+        margin: 10px;
+        font-size: 1.2rem;
+        border-radius: 20px;
+
+        &:focus {
+          box-shadow: 0 0 3px rgba(51, 51, 51, 0.2);
+        }
+      }
+      a {
+        color: rgb(62, 62, 214);
+      }
+    }
+  }
+}
