@@ -9,10 +9,10 @@ const pool = new Pool({
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
   port: 5432, // port par défaut de PostgreSQL
-  // connectionString: process.env.DATABASE_URL,
-  // ssl: {
-  //   rejectUnauthorized: false,
-  // },
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 module.exports = pool;
