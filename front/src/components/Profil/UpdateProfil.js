@@ -8,7 +8,7 @@ const UpdateProfil = () => {
   const userPic = localStorage.getItem("userPic");
   const userId = localStorage.getItem("userId");
   const userText = localStorage.getItem("description");
-  const userDate = localStorage.getItem("createdAt");
+  const userDate = localStorage.getItem("created_at");
   const token = localStorage.getItem("token");
 
   const [updateForm, setUpdateForm] = useState(false);

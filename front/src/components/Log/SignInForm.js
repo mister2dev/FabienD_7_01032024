@@ -31,7 +31,7 @@ const SignInForm = () => {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("userPic", response.data.imagePath);
       localStorage.setItem("description", response.data.description);
-      localStorage.setItem("createdAt", response.data.createdAt);
+      localStorage.setItem("created_at", response.data.created_at);
 
       window.location = "/home";
     } catch (error) {

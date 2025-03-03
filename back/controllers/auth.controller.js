@@ -87,7 +87,7 @@ exports.login = async (req, res) => {
       user: user.username,
       token,
       description: user.description,
-      createdAt: user.createdat,
+      created_at: user.created_at,
       imagePath: user.attachment,
       admin: user.is_admin,
     });
