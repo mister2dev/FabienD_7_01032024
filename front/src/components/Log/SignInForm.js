@@ -58,10 +58,11 @@ const SignInForm = () => {
         <label htmlFor="email"></label>
         <br />
         <input
-          type="text"
+          type="email"
           name="email"
           id="email"
           placeholder="Email"
+          autoCapitalize="none"
           onChange={(e) => setEmail(e.target.value)}
           value={email}
         />
