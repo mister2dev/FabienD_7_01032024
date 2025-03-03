@@ -11,7 +11,8 @@ exports.signup = async (req, res) => {
     const encryptedPassword = await bcrypt.hash(password, 10);
 
     // Définir l'image par défaut de l'utilisateur
-    const attachment = "http://localhost:5000/images/avatar-no.png";
+    const attachment =
+      "https://res.cloudinary.com/ddj78kfck/image/upload/v1740704749/avatar-no.png";
 
     // Requête SQL pour l'insertion dans PostgreSQL
     const sql = `

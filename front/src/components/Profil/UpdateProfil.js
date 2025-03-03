@@ -19,7 +19,8 @@ const UpdateProfil = () => {
     userPic && userPic !== "null"
       ? userPic
       : // Image utilisateur par defaut
-        "http://localhost:5000/images/avatar-no.png"
+        // "http://localhost:5000/images/avatar-no.png"
+        "https://res.cloudinary.com/ddj78kfck/image/upload/v1740704749/avatar-no.png"
   );
 
   const handleUpdate = async () => {
