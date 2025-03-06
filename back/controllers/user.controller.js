@@ -77,7 +77,6 @@ exports.updatePicture = (req, res, next) => {
   let file = null;
 
   if (req.file) {
-    // file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
     file = req.file.path;
   }
 
@@ -89,49 +88,24 @@ exports.updatePicture = (req, res, next) => {
 
     if (attachmentUrl) {
       deleteImage(attachmentUrl);
-    } 
-    // Uploader la nouvelle image sur Cloudinary
-      cloudinary.uploader.upload(file, {
-      folder: "groupo-social",
+    }
+
+    // Mettre à jour l'image de profil dans la base de données
+    const sqlUpdateUser = "UPDATE users SET attachment = $1 WHERE id = $2";
+
+    db.query(sqlUpdateUser, [file, userId], (err, result) => {
+      if (err) {
+        res.status(404).json({ err });
+        throw err;
+      }
+      if (result) {
+        res.status(200).json({ result, file });
+      }
     });
-
-
-      // Mettre à jour l'image de profil dans la base de données
-      const sqlUpdateUser = "UPDATE users SET attachment = $1 WHERE id = $2";
-  
-      db.query(sqlUpdateUser, [file, userId], (err, result) => {
-        if (err) {
-          res.status(404).json({ err });
-          throw err;
-        }
-        if (result) {
-          res.status(200).json({ result, file });
-        }
-      });
-
-
   });
 
-async function deleteImage(imageUrl) {
-  const publicId = imageUrl.split("/").slice(-2).join("/").split(".")[0];
-  await cloudinary.uploader.destroy(publicId);
-}}
-
-    // if (err) {
-    //   res.status(500).json({ err });
-    //   throw err;
-    // }
-
-    // if (result.length > 0 && result[0].attachment) {
-    //   const oldImagePath = path.join(
-    //     __dirname,
-    //     "../images",
-    //     path.basename(result[0].attachment)
-    //   );
-
-    //   // Supprimer l'ancienne image si elle existe
-    //   if (fs.existsSync(oldImagePath)) {
-    //     fs.unlinkSync(oldImagePath);
-    //   }
-    // }
-
+  async function deleteImage(imageUrl) {
+    const publicId = imageUrl.split("/").slice(-2).join("/").split(".")[0];
+    await cloudinary.uploader.destroy(publicId);
+  }
+};
