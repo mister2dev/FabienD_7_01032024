@@ -4,7 +4,7 @@ import SignUpForm from "./SignUpForm";
 
 const Log = () => {
   const [signUpModal, setSignUpModal] = useState();
-  const [signInModal, setSignInModal] = useState();
+  const [signInModal, setSignInModal] = useState(true);
 
   // Mise en place des modals inscription ou connexion
 
