@@ -23,7 +23,9 @@ const NewPostForm = ({ getPosts }) => {
       for (let i = 0; i < findLink.length; i++) {
         if (
           findLink[i].includes("https://www.youtube") ||
-          findLink[i].includes("https://youtube")
+          findLink[i].includes("https://youtube") ||
+          findLink[i].includes("https://m.youtube") ||
+          findLink[i].includes("https://youtu.be")
         ) {
           let embed = findLink[i].replace("watch?v=", "embed/");
           setVideo(embed.split("&")[0]);
@@ -113,7 +115,7 @@ const NewPostForm = ({ getPosts }) => {
                     type="file"
                     id="file-upload"
                     name="file"
-                    accept=".jpg, .jpeg, .png"
+                    accept=".jpg, .jpeg, .png, .gif"
                     onChange={(e) => handlePicture(e)}
                   />
                 </div>
