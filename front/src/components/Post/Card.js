@@ -165,20 +165,22 @@ const Card = ({ getPosts, post }) => {
             )}
             {/* Implémentation des droits admin ou user pour la suppression d'un post*/}
             <div className="icons-container">
-              {userData.id === post.user_id ? (
-                <div className="button-container">
-                  <div onClick={() => setIsUpdated(!isUpdated)}>
-                    <img src="./img/edit.svg" alt="edit" />
-                  </div>
-                  <DeleteCard post={post} getPosts={getPosts} />
-                </div>
-              ) : (
-                userData.is_admin && (
+              <div>
+                {userData.id === post.user_id ? (
                   <div className="button-container">
+                    <div onClick={() => setIsUpdated(!isUpdated)}>
+                      <img src="./img/edit.svg" alt="edit" />
+                    </div>
                     <DeleteCard post={post} getPosts={getPosts} />
                   </div>
-                )
-              )}
+                ) : (
+                  userData.is_admin && (
+                    <div className="button-container">
+                      <DeleteCard post={post} getPosts={getPosts} />
+                    </div>
+                  )
+                )}
+              </div>
               <div className="card-footer">
                 <div className="comment-icon">
                   <img

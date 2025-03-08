@@ -1,5 +1,7 @@
 const db = require("../config/db");
 const cloudinary = require("../services/cloudinaryConfig");
+const { moderateText } = require("../services/moderationServicePerspective");
+const { validateSauceImage } = require("../services/moderationServiceClarifai");
 
 // Fonction utilitaire pour supprimer une image sur Cloudinary
 async function deleteImage(imageUrl) {
@@ -7,14 +9,58 @@ async function deleteImage(imageUrl) {
   await cloudinary.uploader.destroy(publicId);
 }
 
-exports.createPost = (req, res, next) => {
+exports.createPost = async (req, res, next) => {
   const { user_id, content, video } = req.body;
   let file = null;
 
   if (req.file) {
-    // file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
     file = req.file.path;
   }
+
+  // try {
+  //   // Appel de la fonction de modération
+  //   const moderationResult = await moderateText(content);
+
+  //   // Récupérer les scores de toxicité et autres
+  //   console.log("Résultat de la modération :", moderationResult);
+
+  //   const toxicityScore =
+  //     moderationResult.attributeScores.TOXICITY.summaryScore.value;
+  //   const severeToxicityScore =
+  //     moderationResult.attributeScores.SEVERE_TOXICITY.summaryScore.value;
+
+  //   // Si la toxicité ou la toxicité sévère est trop élevée, on rejette le post
+  //   if (toxicityScore > 0.3 || severeToxicityScore > 0.4) {
+  //     console.log("Score de toxicité :", toxicity);
+
+  //     return res
+  //       .status(400)
+  //       .json({ error: "Votre message contient un langage inapproprié." });
+  //   }
+
+  //   // Si la modération est ok, on insère le post dans la base de données
+  //   const post = [user_id, content, file, video];
+  //   const sql =
+  //     "INSERT INTO posts (user_id, content, attachment, video) VALUES ($1, $2, $3, $4)";
+
+  //   db.query(sql, post, (error, result) => {
+  //     if (error) {
+  //       console.error(error);
+  //       res.status(500).json({ error: "Erreur lors de la création du post." });
+  //     } else {
+  //       res.status(201).json({ message: "Votre message a bien été posté !" });
+  //     }
+  //   });
+  // } catch (error) {
+  //   console.error(
+  //     "Erreur dans le processus de modération ou lors de l'insertion :",
+  //     error.message
+  //   );
+  //   res
+  //     .status(500)
+  //     .json({ error: "Erreur interne, veuillez réessayer plus tard." });
+  // }
+
   const post = [user_id, content, file, video];
   const sql =
     "INSERT INTO posts (user_id, content, attachment, video) VALUES ($1, $2, $3, $4)";
@@ -27,6 +73,7 @@ exports.createPost = (req, res, next) => {
       res.status(201).json({ message: "Votre message a bien été posté !" });
     }
   });
+  // };
 };
 
 exports.getAllPosts = (req, res, next) => {
