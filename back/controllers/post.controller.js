@@ -17,63 +17,46 @@ exports.createPost = async (req, res, next) => {
     file = req.file.path;
   }
 
-  // try {
-  //   // Appel de la fonction de modération
-  //   const moderationResult = await moderateText(content);
+  try {
+    // Appel de la fonction de modération
+    const moderationResult = await moderateText(content);
 
-  //   // Récupérer les scores de toxicité et autres
-  //   console.log("Résultat de la modération :", moderationResult);
+    // Récupérer les scores de toxicité et autres
+    console.log("Résultat de la modération :", moderationResult);
 
-  //   const toxicityScore =
-  //     moderationResult.attributeScores.TOXICITY.summaryScore.value;
-  //   const severeToxicityScore =
-  //     moderationResult.attributeScores.SEVERE_TOXICITY.summaryScore.value;
+    const toxicity =
+      moderationResult.attributeScores.TOXICITY.summaryScore.value;
 
-  //   // Si la toxicité ou la toxicité sévère est trop élevée, on rejette le post
-  //   if (toxicityScore > 0.3 || severeToxicityScore > 0.4) {
-  //     console.log("Score de toxicité :", toxicity);
-
-  //     return res
-  //       .status(400)
-  //       .json({ error: "Votre message contient un langage inapproprié." });
-  //   }
-
-  //   // Si la modération est ok, on insère le post dans la base de données
-  //   const post = [user_id, content, file, video];
-  //   const sql =
-  //     "INSERT INTO posts (user_id, content, attachment, video) VALUES ($1, $2, $3, $4)";
-
-  //   db.query(sql, post, (error, result) => {
-  //     if (error) {
-  //       console.error(error);
-  //       res.status(500).json({ error: "Erreur lors de la création du post." });
-  //     } else {
-  //       res.status(201).json({ message: "Votre message a bien été posté !" });
-  //     }
-  //   });
-  // } catch (error) {
-  //   console.error(
-  //     "Erreur dans le processus de modération ou lors de l'insertion :",
-  //     error.message
-  //   );
-  //   res
-  //     .status(500)
-  //     .json({ error: "Erreur interne, veuillez réessayer plus tard." });
-  // }
-
-  const post = [user_id, content, file, video];
-  const sql =
-    "INSERT INTO posts (user_id, content, attachment, video) VALUES ($1, $2, $3, $4)";
-
-  db.query(sql, post, (error, result) => {
-    if (error) {
-      console.error(error);
-      res.status(500).json({ error: "Erreur lors de la création du post." });
-    } else {
-      res.status(201).json({ message: "Votre message a bien été posté !" });
+    // Si la toxicité est trop élevée, on rejette le post
+    if (toxicity > 0.3) {
+      console.log("Score de toxicité :", toxicity);
+      return res
+        .status(400)
+        .json({ message: "Votre message contient un langage inapproprié." });
     }
-  });
-  // };
+
+    // Si la modération est ok, on insère le post dans la base de données
+    const post = [user_id, content, file, video];
+    const sql =
+      "INSERT INTO posts (user_id, content, attachment, video) VALUES ($1, $2, $3, $4)";
+
+    db.query(sql, post, (error, result) => {
+      if (error) {
+        console.error(error);
+        res.status(500).json({ error: "Erreur lors de la création du post." });
+      } else {
+        res.status(201).json({ message: "Votre message a bien été posté !" });
+      }
+    });
+  } catch (error) {
+    console.error(
+      "Erreur dans le processus de modération ou lors de l'insertion :",
+      error.message
+    );
+    res
+      .status(500)
+      .json({ error: "Erreur interne, veuillez réessayer plus tard." });
+  }
 };
 
 exports.getAllPosts = (req, res, next) => {

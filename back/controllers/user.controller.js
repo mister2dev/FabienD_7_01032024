@@ -8,7 +8,7 @@ exports.getOneUser = (req, res, next) => {
   const sql = `SELECT id, username, email, is_admin FROM users WHERE id = $1`;
 
   db.query(sql, [userId], (err, result) => {
-    console.log("resultat :", result);
+    // console.log("resultat :", result);
     if (err) {
       res.status(404).json({ err });
       throw err;
@@ -21,7 +21,7 @@ exports.getAllUsers = (req, res, next) => {
   const sql = `SELECT id, username, email, attachment FROM users`;
 
   db.query(sql, (err, result) => {
-    console.log("liste user :", result);
+    // console.log("liste user :", result);
     if (err) {
       res.status(404).json({ err });
       throw err;

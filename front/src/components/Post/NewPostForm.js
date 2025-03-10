@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { isEmpty } from "../Utils";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const NewPostForm = ({ getPosts }) => {
   const userId = localStorage.getItem("userId");
@@ -9,6 +10,7 @@ const NewPostForm = ({ getPosts }) => {
   const [postPicture, setPostPicture] = useState(null);
   const [video, setVideo] = useState("");
   const [file, setFile] = useState();
+  const [errorMessage, setErrorMessage] = useState(""); // Stocker le message d'erreur
 
   // Prévisualisation de l'image et stockage dans l'état
   const handlePicture = (e) => {
@@ -63,10 +65,24 @@ const NewPostForm = ({ getPosts }) => {
           setPostPicture(null);
           setVideo("");
           setFile(null);
+          setErrorMessage(""); // Réinitialiser l'erreur après un post réussi
         })
-        .catch((err) => console.log(err));
-    } else {
-      alert("Veuillez entrer un message");
+        .catch((err) => {
+          if (err.response && err.response.status === 400) {
+            Swal.fire({
+              toast: true,
+              position: "bottom-right",
+              icon: "warning",
+              text: err.response.data.message, // Message du backend
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+            });
+            setErrorMessage(err.response.data.message); // Stocker le message d'erreur reçu
+          } else {
+            console.error("Erreur Axios :", err.message);
+          }
+        });
     }
   };
 
