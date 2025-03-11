@@ -4,6 +4,7 @@ import { dateParser, isEmpty } from "../Utils";
 import LikeButton from "./LikeButton";
 import DeleteCard from "./DeleteCard";
 import CardComments from "./CardComments";
+import Swal from "sweetalert2";
 
 const Card = ({ getPosts, post }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -34,7 +35,21 @@ const Card = ({ getPosts, post }) => {
           setIsUpdated(false);
           getPosts();
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          if (err.response && err.response.status === 400) {
+            Swal.fire({
+              toast: true,
+              position: "bottom-right",
+              icon: "warning",
+              text: err.response.data.message, // Message du backend
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+            });
+          } else {
+            console.error("Erreur Axios :", err.message);
+          }
+        });
     }
     console.log("post.attachment", post.attachment);
     setIsUpdated(false);

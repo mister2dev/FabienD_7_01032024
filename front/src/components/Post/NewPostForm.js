@@ -10,7 +10,6 @@ const NewPostForm = ({ getPosts }) => {
   const [postPicture, setPostPicture] = useState(null);
   const [video, setVideo] = useState("");
   const [file, setFile] = useState();
-  const [errorMessage, setErrorMessage] = useState(""); // Stocker le message d'erreur
 
   // Prévisualisation de l'image et stockage dans l'état
   const handlePicture = (e) => {
@@ -65,7 +64,6 @@ const NewPostForm = ({ getPosts }) => {
           setPostPicture(null);
           setVideo("");
           setFile(null);
-          setErrorMessage(""); // Réinitialiser l'erreur après un post réussi
         })
         .catch((err) => {
           if (err.response && err.response.status === 400) {
@@ -78,7 +76,6 @@ const NewPostForm = ({ getPosts }) => {
               timer: 3000,
               timerProgressBar: true,
             });
-            setErrorMessage(err.response.data.message); // Stocker le message d'erreur reçu
           } else {
             console.error("Erreur Axios :", err.message);
           }

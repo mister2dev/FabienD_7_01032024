@@ -2,6 +2,23 @@ import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { commentDateParser, isEmpty } from "../Utils";
 import DeleteComment from "./DeleteComment";
+import Swal from "sweetalert2";
+
+const handleAxiosError = (err) => {
+  if (err.response && err.response.status === 400) {
+    Swal.fire({
+      toast: true,
+      position: "bottom-right",
+      icon: "warning",
+      text: err.response.data.message, // Message du backend
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+    });
+  } else {
+    console.error("Erreur Axios :", err.message);
+  }
+};
 
 const CardComments = ({ postId, getComments, comment }) => {
   const [comments, setComments] = useState([]);
@@ -86,7 +103,7 @@ const CardComments = ({ postId, getComments, comment }) => {
           getComments(); // On raffraichit la liste des données
           fetchComments();
         })
-        .catch((err) => console.log(err));
+        .catch(handleAxiosError);
     }
   };
 
@@ -107,7 +124,7 @@ const CardComments = ({ postId, getComments, comment }) => {
           setTextUpdate("");
           fetchComments();
         })
-        .catch((err) => console.log(err));
+        .catch(handleAxiosError);
     }
   };
 

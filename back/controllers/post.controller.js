@@ -9,32 +9,43 @@ async function deleteImage(imageUrl) {
   await cloudinary.uploader.destroy(publicId);
 }
 
+async function moderateTextContent(content, res) {
+  const moderationResult = await moderateText(content);
+  console.log("Résultat de la modération :", moderationResult);
+
+  toxicity =
+    moderationResult.attributeScores?.TOXICITY?.summaryScore?.value ?? 0;
+
+  if (toxicity > 0.3) {
+    res.status(400).json({
+      message: "Votre message contient un langage inapproprié.",
+    });
+    return false;
+  }
+  return true;
+}
+
+function deletePostFromDb(post_id, res) {
+  const sql = `DELETE FROM posts WHERE id = ${post_id}`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      res.status(404).json({ err });
+      throw err;
+    }
+    res.status(200).json(result);
+  });
+}
+
 exports.createPost = async (req, res, next) => {
   const { user_id, content, video } = req.body;
-  let file = null;
-
-  if (req.file) {
-    file = req.file.path;
-  }
+  let file = req.file ? req.file.path : null;
 
   try {
-    // Appel de la fonction de modération
-    const moderationResult = await moderateText(content);
-
-    // Récupérer les scores de toxicité et autres
-    console.log("Résultat de la modération :", moderationResult);
-
-    const toxicity =
-      moderationResult.attributeScores.TOXICITY.summaryScore.value;
-
-    // Si la toxicité est trop élevée, on rejette le post
-    if (toxicity > 0.3) {
-      console.log("Score de toxicité :", toxicity);
-      return res
-        .status(400)
-        .json({ message: "Votre message contient un langage inapproprié." });
+    if (content) {
+      const isValid = await moderateTextContent(content, res);
+      if (!isValid) return; // Stopper l'exécution si le texte est toxique
     }
-
     // Si la modération est ok, on insère le post dans la base de données
     const post = [user_id, content, file, video];
     const sql =
@@ -83,23 +94,21 @@ exports.getOnePost = (req, res, next) => {
   });
 };
 
-exports.updatePost = (req, res, next) => {
+exports.updatePost = async (req, res, next) => {
   const postId = req.params.id;
   const content = req.body.content;
-  //const sql = `UPDATE posts SET content = "${content}" WHERE id = ${postId};`;
 
-  //  let file = null;
+  if (content) {
+    const isValid = await moderateTextContent(content, res);
+    if (!isValid) return; // Stopper l'exécution si le texte est toxique
+  }
+
   let file =
     req.body.file ||
     (req.file &&
       `${req.protocol}://${req.get("host")}/images/${req.file.filename}`);
   console.log("request", req.body);
-  // if (req.body.file) {
-  //   file = req.body.file;
-  // }
-  // if (req.file) {
-  //   file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
-  // }
+
   console.log("file", file);
   const sql = "UPDATE posts SET content = $1, attachment = $2 WHERE id = $3";
 
@@ -123,21 +132,9 @@ exports.deleteOnePost = (req, res, next) => {
 
     if (attachmentUrl) {
       deleteImage(attachmentUrl);
-      deletePostFromDb(post_id);
+      deletePostFromDb(post_id, res);
     } else {
-      deletePostFromDb(post_id);
+      deletePostFromDb(post_id, res);
     }
   });
-
-  function deletePostFromDb(post_id) {
-    const sql = `DELETE FROM posts WHERE id = ${post_id}`;
-
-    db.query(sql, (err, result) => {
-      if (err) {
-        res.status(404).json({ err });
-        throw err;
-      }
-      res.status(200).json(result);
-    });
-  }
 };
