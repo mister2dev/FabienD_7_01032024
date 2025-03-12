@@ -30,7 +30,7 @@ async function moderateImage(imageUrl) {
     console.log("🔍 Résultats de la modération d'image :", moderationResult);
 
     // Définir un seuil de tolérance (ex: 0.8 = 80% de confiance)
-    const SEUIL_INAPPROPRIE = 0.8;
+    const SEUIL_INAPPROPRIE = 0.65;
 
     // Vérifie si une catégorie sensible dépasse le seuil
     const categoriesInterdites = [
