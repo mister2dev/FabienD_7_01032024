@@ -1,7 +1,7 @@
 const db = require("../config/db");
 const cloudinary = require("../services/cloudinaryConfig");
 const { moderateText } = require("../services/moderationServicePerspective");
-const { validateSauceImage } = require("../services/moderationServiceClarifai");
+const { moderateImage } = require("../services/moderationServiceClarifai");
 
 // Fonction utilitaire pour supprimer une image sur Cloudinary
 async function deleteImage(imageUrl) {
@@ -25,6 +25,27 @@ async function moderateTextContent(content, res) {
   return true;
 }
 
+// Fonction réutilisable de modération de l'image avec Clarifai
+async function moderateImageContent(imageUrl, res) {
+  try {
+    const isValidImage = await moderateImage(imageUrl);
+    if (!isValidImage) {
+      await deleteImage(imageUrl);
+      res.status(400).json({
+        message: "L'image n'est pas appropriée.",
+      });
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error("Erreur lors de la validation de l'image :", error);
+    res
+      .status(500)
+      .json({ message: "Erreur lors de la validation de l'image." });
+    return false;
+  }
+}
+
 function deletePostFromDb(post_id, res) {
   const sql = `DELETE FROM posts WHERE id = ${post_id}`;
 
@@ -46,6 +67,13 @@ exports.createPost = async (req, res, next) => {
       const isValid = await moderateTextContent(content, res);
       if (!isValid) return; // Stopper l'exécution si le texte est toxique
     }
+
+    if (file) {
+      const isValidImage = await moderateImageContent(file, res);
+      console.log("isValidImage", isValidImage);
+      if (!isValidImage) return; // Stopper l'exécution si l'image est invalide
+    }
+
     // Si la modération est ok, on insère le post dans la base de données
     const post = [user_id, content, file, video];
     const sql =
@@ -107,7 +135,6 @@ exports.updatePost = async (req, res, next) => {
     req.body.file ||
     (req.file &&
       `${req.protocol}://${req.get("host")}/images/${req.file.filename}`);
-  console.log("request", req.body);
 
   console.log("file", file);
   const sql = "UPDATE posts SET content = $1, attachment = $2 WHERE id = $3";

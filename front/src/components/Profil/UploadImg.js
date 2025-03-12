@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const UploadImg = ({ setPreview }) => {
   const [file, setFile] = useState(null);
@@ -53,9 +54,21 @@ const UploadImg = ({ setPreview }) => {
         // window.location.reload();
         setError("");
       }
-    } catch (error) {
-      console.error(error);
-      setError("Une erreur s'est produite lors du téléchargement de l'image");
+    } catch (err) {
+      if (err.response && err.response.status === 400) {
+        Swal.fire({
+          toast: true,
+          position: "bottom-right",
+          icon: "warning",
+          text: err.response.data.message, // Message du backend
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+        });
+      } else {
+        console.error(err);
+        setError("Une erreur s'est produite lors du téléchargement de l'image");
+      }
     }
   };
 

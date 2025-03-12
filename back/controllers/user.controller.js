@@ -2,6 +2,33 @@ const db = require("../config/db");
 const fs = require("fs");
 const path = require("path");
 const cloudinary = require("cloudinary").v2;
+const { moderateImage } = require("../services/moderationServiceClarifai");
+
+async function moderateImageContent(imageUrl, res) {
+  try {
+    const isValidImage = await moderateImage(imageUrl);
+    console.log("isValidImagefunction", isValidImage);
+    if (!isValidImage) {
+      await deleteImage(imageUrl);
+      res.status(400).json({
+        message: "L'image n'est pas appropriée.",
+      });
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error("Erreur lors de la validation de l'image :", error);
+    res
+      .status(500)
+      .json({ message: "Erreur lors de la validation de l'image." });
+    return false;
+  }
+}
+
+async function deleteImage(imageUrl) {
+  const publicId = imageUrl.split("/").slice(-2).join("/").split(".")[0];
+  await cloudinary.uploader.destroy(publicId);
+}
 
 exports.getOneUser = (req, res, next) => {
   const userId = req.params.id;
@@ -72,12 +99,18 @@ exports.updateUser = (req, res, next) => {
   });
 };
 
-exports.updatePicture = (req, res, next) => {
+exports.updatePicture = async (req, res, next) => {
   const userId = req.body.userId;
   let file = null;
 
   if (req.file) {
     file = req.file.path;
+  }
+
+  if (file) {
+    const isValidImage = await moderateImageContent(file, res);
+    console.log("isValidImage", isValidImage);
+    if (!isValidImage) return; // Stopper l'exécution si l'image est invalide
   }
 
   // Requête SQL pour obtenir le chemin de l'ancienne image
@@ -103,9 +136,4 @@ exports.updatePicture = (req, res, next) => {
       }
     });
   });
-
-  async function deleteImage(imageUrl) {
-    const publicId = imageUrl.split("/").slice(-2).join("/").split(".")[0];
-    await cloudinary.uploader.destroy(publicId);
-  }
 };
