@@ -8,7 +8,6 @@ const Home = () => {
 
   // Récuperation de tous les posts
   const getPosts = (num) => {
-    console.log("num", num);
     const token = localStorage.getItem("token");
 
     return axios

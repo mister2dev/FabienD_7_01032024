@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { dateParser, isEmpty } from "../Utils";
 import LikeButton from "./LikeButton";
@@ -57,7 +57,33 @@ const Card = ({ getPosts, post }) => {
 
   // Execution de la récuperation des données utilisateurs uniquement au premier chargement de la fonction Card
 
-  const getComments = () => {
+  const getUsersData = useCallback(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}api/user/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setUsersData(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, [token]); // Dépend de `token`
+
+  const getUserData = useCallback(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}api/user/` + userId, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setUserData(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, [userId, token]); // Dépend de `userId` et `token`
+
+  const getComments = useCallback(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}api/comment/` + post.id, {
         headers: {
@@ -68,39 +94,13 @@ const Card = ({ getPosts, post }) => {
         setComments(res.data);
       })
       .catch((err) => console.log(err));
-  };
+  }, [post.id, token]); // Dépend de `post.id` et `token`
 
   useEffect(() => {
-    const getUsersData = () => {
-      axios
-        .get(`${process.env.REACT_APP_API_URL}api/user/`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => {
-          setUsersData(res.data);
-        })
-        .catch((err) => console.log(err));
-    };
-
-    const getUserData = () => {
-      axios
-        .get(`${process.env.REACT_APP_API_URL}api/user/` + userId, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => {
-          setUserData(res.data);
-        })
-        .catch((err) => console.log(err));
-    };
-
     getUsersData();
     getUserData();
     getComments();
-  }, [post.id, userId, token]);
+  }, [getUsersData, getUserData, getComments]);
 
   // On desactive le loader dès que les données utilisateurs sont chargées
   useEffect(() => {
@@ -110,6 +110,7 @@ const Card = ({ getPosts, post }) => {
   }, [usersData]);
 
   console.log("res.usersData", usersData);
+  console.log("res.userData", userData);
 
   return (
     <li className="card-container">

@@ -1,3 +1,5 @@
+// import "./Loader.css"; // Import du style pour le spinner
+
 // Formatage du texte à afficher pour la date
 export const dateParser = (num) => {
   let options = {
@@ -42,5 +44,14 @@ export const isEmpty = (value) => {
     value === null ||
     (typeof value === "object" && Object.keys(value).length === 0) ||
     (typeof value === "string" && value.trim().length === 0)
+  );
+};
+
+export const Loader = ({ message }) => {
+  return (
+    <div className="loader-container">
+      <div className="spinner"></div>
+      <p>{message}</p>
+    </div>
   );
 };

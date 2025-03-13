@@ -1,15 +1,27 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Loader } from "../Utils";
 
 const SignInForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // Ajout de l'état de chargement
+  const [showDelayMessage, setShowDelayMessage] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault(); //Evite le comportement par defaut, que la page se recharge apres un submit
 
+    setLoading(true); // Active le loader
+    setShowDelayMessage(false); // Réinitialise le message
+
+    const timeout = setTimeout(() => {
+      setShowDelayMessage(true);
+    }, 5000);
+
     try {
+      await new Promise((resolve) => setTimeout(resolve, 10000));
+
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}api/auth/login`,
         {
@@ -20,6 +32,7 @@ const SignInForm = () => {
           withCredentials: false,
         }
       );
+      clearTimeout(timeout); // Annule le message si la requête finit avant 5s
 
       if (response.data.error) {
         setError(response.data.error); // Stocker le message d'erreur dans l'état
@@ -36,27 +49,18 @@ const SignInForm = () => {
       window.location = "/home";
     } catch (error) {
       if (error.response) {
-        // La requête a été reçue par le serveur, mais il a renvoyé un code d'erreur
-        console.error("Erreur de requête :", error.response.data);
-        setError(error.response.data.error); // Stocker le message d'erreur dans l'état
-      } else if (error.request) {
-        // La requête a été effectuée, mais aucune réponse n'a été reçue
-        console.error("Aucune réponse reçue pour la requête :", error.request);
+        setError(error.response.data.error);
       } else {
-        // Une erreur s'est produite lors de la configuration de la requête
-        console.error(
-          "Erreur lors de la configuration de la requête :",
-          error.message
-        );
+        setError("Une erreur s'est produite, veuillez réessayer.");
       }
+    } finally {
+      setLoading(false); // Désactive le loader après la requête
     }
   };
 
   return (
-    <>
-      <form action="" onSubmit={handleLogin} id="sign-up-form">
-        <label htmlFor="email"></label>
-        <br />
+    <div className="signin-container">
+      <form action="" onSubmit={handleLogin} id="sign-in-form" noValidate>
         <input
           type="email"
           name="email"
@@ -67,7 +71,6 @@ const SignInForm = () => {
           value={email}
         />
         <br />
-        <label htmlFor="password"></label>
         <br />
         <input
           type="password"
@@ -81,10 +84,28 @@ const SignInForm = () => {
         <br />
         <br />
         <input type="submit" value="Suivant" />
+        <div className="signupError">{error}</div>
       </form>
-      <div className="signupError">{error}</div>
-    </>
+      {/* Affichage du message d'erreur */}
+
+      {/* Affichage du loader sous le formulaire */}
+      {loading && (
+        <Loader
+          message={
+            <>
+              Connexion en cours...
+              <br />
+              <br />
+              {showDelayMessage &&
+                `
+              Le site étant hébergé sur un serveur gratuit qui se met en
+              veille, il se peut que le chargement soit un peu long.
+              `}
+            </>
+          }
+        />
+      )}
+    </div>
   );
 };
-
 export default SignInForm;
