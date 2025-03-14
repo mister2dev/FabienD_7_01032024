@@ -20,7 +20,7 @@ const SignInForm = () => {
     }, 5000);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 10000));
+      // await new Promise((resolve) => setTimeout(resolve, 10000));
 
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}api/auth/login`,
