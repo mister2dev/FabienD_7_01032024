@@ -10,6 +10,7 @@ const NewPostForm = ({ getPosts }) => {
   const [postPicture, setPostPicture] = useState(null);
   const [video, setVideo] = useState("");
   const [file, setFile] = useState();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Prévisualisation de l'image et stockage dans l'état
   const handlePicture = (e) => {
@@ -22,25 +23,40 @@ const NewPostForm = ({ getPosts }) => {
     const handleVideo = () => {
       let findLink = message.split(" ");
       for (let i = 0; i < findLink.length; i++) {
-        if (
-          findLink[i].includes("https://www.youtube") ||
-          findLink[i].includes("https://youtube") ||
-          findLink[i].includes("https://m.youtube") ||
-          findLink[i].includes("https://youtu.be")
-        ) {
-          let embed = findLink[i].replace("watch?v=", "embed/");
-          setVideo(embed.split("&")[0]);
+        let videoId = null;
+
+        // Vérifier si le lien est un lien YouTube standard
+        if (findLink[i].includes("youtube.com/watch?v=")) {
+          videoId = findLink[i].split("watch?v=")[1].split("&")[0];
+        }
+        // Vérifier si le lien est un lien YouTube mobile
+        else if (findLink[i].includes("m.youtube.com/watch?v=")) {
+          videoId = findLink[i].split("watch?v=")[1].split("&")[0];
+        }
+        // Vérifier si le lien est un lien YouTube raccourci (format partage)
+        else if (findLink[i].includes("youtu.be/")) {
+          videoId = findLink[i].split("youtu.be/")[1].split("?")[0];
+        }
+
+        // Si un ID vidéo a été trouvé, on le transforme en URL embeddable
+        if (videoId) {
+          const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+          setVideo(embedUrl);
           findLink.splice(i, 1);
           setMessage(findLink.join(" "));
           setPostPicture("");
         }
       }
     };
+
     handleVideo();
   }, [message, video]);
 
   // On génère un formulaire de données pour envoi au backend si il y a du texte, une image ou une vidéo
   const handlePost = async () => {
+    if (isSubmitting) return; // Empêche le double envoi
+    setIsSubmitting(true); // Désactive le bouton
+
     const token = localStorage.getItem("token");
     if (message || postPicture || video) {
       const formData = new FormData();
@@ -48,38 +64,38 @@ const NewPostForm = ({ getPosts }) => {
       formData.append("content", message);
       if (file) formData.append("image", file);
       formData.append("video", video);
-
-      await axios({
-        method: "post",
-        url: `${process.env.REACT_APP_API_URL}api/post/`,
-        data: formData,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        // Puis on recharge la page avec la mise à jour et on reinitialise les états
-        .then(() => {
-          getPosts();
-          setMessage("");
-          setPostPicture(null);
-          setVideo("");
-          setFile(null);
-        })
-        .catch((err) => {
-          if (err.response && err.response.status === 400) {
-            Swal.fire({
-              toast: true,
-              position: "bottom-right",
-              icon: "warning",
-              text: err.response.data.message, // Message du backend
-              showConfirmButton: false,
-              timer: 3000,
-              timerProgressBar: true,
-            });
-          } else {
-            console.error("Erreur Axios :", err.message);
+      try {
+        await axios.post(
+          `${process.env.REACT_APP_API_URL}api/post/`,
+          formData,
+          {
+            headers: { Authorization: `Bearer ${token}` },
           }
-        });
+        );
+
+        // Met à jour les posts et réinitialise les champs
+        getPosts();
+        setMessage("");
+        setPostPicture(null);
+        setVideo("");
+        setFile(null);
+      } catch (err) {
+        if (err.response && err.response.status === 400) {
+          Swal.fire({
+            toast: true,
+            position: "bottom-right",
+            icon: "warning",
+            text: err.response.data.message,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          });
+        } else {
+          console.error("Erreur Axios :", err.message);
+        }
+      } finally {
+        setIsSubmitting(false); // Réactive le bouton après la requête
+      }
     }
   };
 
@@ -141,8 +157,12 @@ const NewPostForm = ({ getPosts }) => {
             )}
           </div>
           <div className="btn-send">
-            <button className="send" onClick={handlePost}>
-              Envoyer
+            <button
+              className="send"
+              onClick={handlePost}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Envoi..." : "Envoyer"}
             </button>
           </div>
         </div>
